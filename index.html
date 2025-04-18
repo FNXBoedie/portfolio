@@ -1,0 +1,344 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Biografie</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo">DIGIPROJECTS</a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">							
+							<li class="active"><a href="index.html">Bio</a></li>
+							<li><a href="ai.html">A.I.</a></li>
+							<li><a href="digiprojects.html">Digiprojects</a></li>
+							<li><a href="coding.html">Coding</a></li>
+							<li><a href="software.html">Software</a></li>
+							<li><a href="taal.html">Taal</a></li>	
+							<li><a href="events.html">Events</a></li>
+							<li><a href="studie.html">studie</a></li>
+							<li><a href="workshops.html">workshops</a></li>
+							<li><a href="files/digipunten/index.html">Praxis</a></li>
+						</ul>				
+					</nav>
+
+				<!-- Main -->
+				<div id="main">
+
+					<!-- Post -->
+						<section class="post">
+							<header class="major">
+																
+								<h1>Portfolio<br />
+								Bart Peeters</h1>
+								<p>Dit portfolio biedt een overzicht van projecten en vaardigheden, met een focus op technologie, maatschappelijke impact en innovatie. Het dient als een centrale plek om werk te tonen, ideeën te verkennen en kennis toe te passen in de praktijk. Door verschillende disciplines te combineren, ontstaan creatieve en praktische oplossingen voor uiteenlopende uitdagingen.</p>
+							</header>
+							<div class="image main" style="width: 80%; margin: 0 auto; text-align: center;"><img src="images/creationofadam.jpg" alt="" style="width: 100%;" /></div></p>
+						</p>
+						<p style="text-align: center;">Luister naar de podcast over deze portfolio!</p>
+							<div style="width: 80%; margin: 0 auto; text-align: center;">
+								<audio controls>
+									<source src="files/portfoliopodcast.mp3" type="audio/mp3">
+									
+								Your browser does not support the audio element.
+								</audio>
+								
+								
+							</div>
+							
+							<div>
+								<br>
+								<h3>Chat:</h3>
+								<section class="posts" style="margin-top:-0rem;">
+								</div>
+
+								<!DOCTYPE html>
+								<html lang="en">
+								<head>
+								  <meta charset="UTF-8">
+								  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+								  <title>Dark Mode Modern Chat with Mistral AI</title>
+								</head>
+								<body>
+								
+								  
+								
+									<div id="chat-container" style="height: 500px; overflow-y: scroll; padding: 20px; background: white; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
+								
+<div id="input-container" style="display: flex; align-items: center; background: white; padding: 16px; border: 1px solid #e5e7eb; border-radius: 8px;">
+  <input type="text" id="message-input" placeholder="Stel Bart een vraag..." style="width: calc(100% - 80px); padding: 12px; border: 1px solid #e5e7eb; border-radius: 16px; margin-right: 16px; margin-bottom: 12px; font-size: 18px; height: 60px;">
+  <button id="send-button" style="background-color: #74aeeb; color: white; border: none; padding: 0px 8px; border-radius: 8px; cursor: pointer; font-weight: 400;">Versturen</button>
+</div>
+<p style="display: inline-block; font-size: 0.8rem; font-style: italic; color: #6b7280;">* Net zoals de echte Bart is hij soms nog wat in de war en kan rare uitspraken doen!</p>
+									
+									<style>
+									  .message {
+										font-size: -4rem;
+										padding: 12px 16px;
+										margin-bottom: 12px;
+										border-radius: 8px;
+										max-width: 80%;
+										word-wrap: break-word;
+									  }
+									
+									  .user {
+										background-color: #74aeeb;
+										color: white;
+										margin-left: auto;
+									  }
+									
+									  .bot {
+										background-color: #f3f4f6;
+										color: #1f2937;
+									  }
+									</style>
+																	
+									<script>
+									  const chatContainer = document.getElementById('chat-container');
+									  const messageInput = document.getElementById('message-input');
+									  const sendButton = document.getElementById('send-button');
+									
+									  const mistralApiKey = "C9gS3PqYRSyVlXXVbtMuqt7mwu6gbrwm"; // **REPLACE WITH YOUR ACTUAL API KEY**
+									
+									  function addMessage(text, sender) {
+										const messageDiv = document.createElement('div');
+										messageDiv.classList.add('message', sender);
+										messageDiv.textContent = text;
+										chatContainer.appendChild(messageDiv);
+										chatContainer.scrollTop = chatContainer.scrollHeight;
+									  }
+									
+									  sendButton.addEventListener('click', async () => {
+										const messageText = messageInput.value;
+										if (messageText.trim() !== '') {
+										  addMessage(messageText, 'user');
+										  messageInput.value = '';
+									
+										  try {
+											const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
+											  method: "POST",
+											  headers: {
+												"Content-Type": "application/json",
+												"Authorization": `Bearer ${mistralApiKey}`
+											  },
+											  body: JSON.stringify({
+												messages: [{ role: "user", content: `Jij bent altijd Bart van Digipunt. Digipunt helpt de Gentse burgers met digitale inclusie en met hun digitale vragen. Je hebt ook interesse in A.I., maatschappelijk werk en spaanse taal. ${messageText}` }],
+												model: "mistral-tiny"
+											  })
+											});
+									
+											if (!response.ok) {
+											  throw new Error(`Mistral API error: ${response.status} ${response.statusText}`);
+											}
+									
+											const data = await response.json();
+											addMessage(data.choices[0].message.content, 'bot');
+									
+										  } catch (error) {
+											console.error("Error:", error);
+											addMessage(`Error: ${error.message}`, 'bot');
+										  }
+										}
+									  });
+									
+									  messageInput.addEventListener('keypress', (event) => {
+										if (event.key === 'Enter') {
+										  sendButton.click();
+										}
+									  });
+									</script>
+								
+								
+								
+								</script>
+
+						</section>
+
+
+						<div>
+						
+						<h1 style="text-align: center;">Overzicht & Domeinen</h1>
+						
+						<section class="posts" style="margin-top:-0rem;">
+						</div>
+
+				
+						<div style="font-size: 0.9rem;">
+							<h3>Hoofddomeinen van Ontwikkeling:</h3>
+
+							<h4>Artificiële Intelligentie (AI):</h4>
+							<ul>
+								<li>Kennis opbouwen: Begrijpen hoe AI-algoritmen werken (machine learning, deep learning).</li>
+								<li>Praktische vaardigheden: Programmeren leren met HTML, JavaScript en JS.</li>
+								<li>Creatieve toepassingen: Experimenteren met AI-tools voor beeld- en videogeneratie.</li>
+								<li>Projecten: Een eigen AI-project opzetten om kennis toe te passen (bijvoorbeeld een kleine tool voor Digipunt).</li>
+							</ul>
+
+							<h4>Maatschappelijk Werk:</h4>
+							<ul>
+								<li>Kennis: Begrip van sociologische en psychologische concepten verdiepen.</li>
+								<li>Praktische ervaring: Actief betrokken zijn bij Digipunt-activiteiten en workshops.</li>
+								<li>Organisatievaardigheden: Kleine evenementen plannen en uitvoeren.</li>
+								<li>Netwerk opbouwen: Contacten leggen in de maatschappelijke sector.</li>
+							</ul>
+
+							<h4>Talen (Frans en Spaans):</h4>
+							<ul>
+								<li>Basisniveau: Effectieve communicatie in het Frans en Spaans voor dagelijkse en professionele situaties.</li>
+								<li>Culturele kennis: Meer begrip van Franstalige en Spaanstalige culturen.</li>
+								<li>Professioneel gebruik: Bekwaam zijn in het uitvoeren van professioneel werk in zowel Frans als Spaans.</li>
+								<li>Internationaal gebruik: In staat zijn om in het buitenland te werken, reizen of wonen zonder taalbarrière.</li>
+							</ul>
+
+							<b>Langetermijndoel:</b> Binnen vijf jaar doorgroeien naar een job in de maatschappelijke sector, gebaseerd op opgebouwde ervaring en kennis.
+							<p></p>
+							<p></p>
+							<br>
+							<div class="image main" style="width: 50%; margin: 0 auto; text-align: center;"><img src="images/robotowl.jpg" alt="" style="width: 100%;" /></div></p>
+
+					</div>
+
+					<div>
+					
+
+						<h1 style="text-align: center;">Doelen & Middelen</h1>
+						<section class="posts" style="margin-top:-0rem;">
+						</div>
+
+				
+						<div style="font-size: 0.9rem;">
+							<h3>Artificiële Intelligentie (AI):</h3>
+
+							<ul>
+								<li>Korte-termijn (1 jaar): Grondbeginselen van programmeren en AI begrijpen.</li>
+								<li>Middellange-termijn (2 jaar): Een eerste werkend AI-project ontwikkelen.</li>
+								<li>Langetermijn (5 jaar): Een grootschalig project realiseren.</li>
+							</ul>
+
+							<h4>Middelen en Acties:</h4>
+
+							<ul>
+								<li>Online tutorials volgen, YouTube en GitHub-projecten bestuderen, AI-subreddits volgen, en een portfolio ontwikkelen.</li>
+							</ul>
+
+							<h3>Maatschappelijk Werk:</h3>
+
+							<ul>
+								<li>Korte-termijn (6 maanden): Actief deelnemen aan Digipunt-workshops en kennis direct toepassen.</li>
+								<li>Middellange-termijn (2-3 jaar): Zelfstandig kleine evenementen organiseren en reflecteren op de resultaten.</li>
+								<li>Langetermijn (5 jaar): Een portfolio opbouwen van succesvolle initiatieven bij Digipunt.</li>
+							</ul>
+
+							<h4>Middelen en Acties:</h4>
+
+							<ul>
+								<li>Leermateriaal uit cursussen toepassen, luisteren en leren op de werkvloer, networking op locaties, initiatieven organiseren.</li>
+							</ul>
+
+							<h3>Talen (Frans en Spaans):</h3>
+
+							<ul>
+								<li>Korte-termijn (1 jaar): Basisgrammatica en woordenschat opbouwen.</li>
+								<li>Middellange-termijn (2-3 jaar): Comfortabel eenvoudige gesprekken voeren en schrijven.</li>
+								<li>Langetermijn (5 jaar): CEFR-diploma B2 of C1 halen.</li>
+							</ul>
+
+							<h4>Middelen en Acties:</h4>
+
+							<ul>
+								<li>Apps en A.I.-technieken zoals Duolingo gebruiken, podcasts en video's bekijken, conversatiepartners vinden, converseren op de werkvloer.</li>
+							</ul>
+							<p></p>
+							<p></p>
+							<br>
+							
+							<div class="image main" style="width: 50%; margin: 0 auto; text-align: center;"><img src="images/owllaptop.jpg" alt="" style="width: 100%;" /></div></p>
+					</div>
+
+					<div>
+						
+
+						<h1 style="text-align: center;">Methode & Toepassingen</h1>
+						<section class="posts" style="margin-top:-0rem;">
+						</div>
+
+				
+						<div style="font-size: 0.9rem;">
+							<h3>Autodidactisme:</h3>
+							
+							<p>Autodidactisch leren biedt een uitstekende mogelijkheid om tijdens rustige momenten bij Digipunt waardevolle kennis op te doen.
+							Door zelfstandig te leren, kunnen vaardigheden en inzichten voortdurend worden uitgebreid, en kan er constant worden ingespeeld op persoonlijke interesses.</p>
+								
+								
+								<b>Strategieën voor effectief leren en toepassen:</b>								
+								<ul style="list-style: disc; margin-left: 2rem;">
+									<li>Reflectie en documentatie: Actief bijhouden van verworven vaardigheden en inzichten, bijvoorbeeld via een blog of notitiesysteem.</li>
+									<li>Mentorschap en kennisdeling: Naarmate de kennis groeit, anderen begeleiden of workshops geven binnen Digipunt of elders.</li>
+									<li>Cross-domein toepassingen: Integreren van AI en taalvaardigheden in maatschappelijke projecten, zoals het ontwikkelen van een AI-tool die mensen helpt met digitale geletterdheid in het Frans of Spaans.</li>
+									<li>Efficiënt leren: Ontwikkelen van methodes om sneller en effectiever te leren, zoals spaced repetition voor talen of hands-on experimenten voor AI.</li>
+								</ul>
+								
+									
+
+
+							</ul>
+							</ul>
+							<h3>Evaluatie en Aanpassing:</h3>
+							<p>Dit plan zal jaarlijks worden herzien en aangepast op basis van nieuwe interesses, kansen en voortgang in de huidige doelen.</p>
+							<p></p>
+							<p></p>
+							<br>
+							<div class="image main" style="width: 50%; margin: 0 auto; text-align: center;"><img src="images/owluniversity.jpg" alt="" style="width: 100%;" /></div></p>
+						</div>
+						
+
+							
+					
+					
+					
+						</div>
+
+						
+
+
+					
+
+						
+						
+
+
+
+
+
+				</div>
+
+			
+			<!-- Copyright -->
+				<div id="copyright">
+					<ul><li>Concept: <a href="plaatshyperlinkhier">Bart Peeters</a></li></ul>
+				</div>
+
+		</div>
+
+	<!-- Scripts -->
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.scrollex.min.js"></script>
+		<script src="assets/js/jquery.scrolly.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+
+</body>
+</html>
