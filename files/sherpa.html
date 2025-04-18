@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sherpa Guide</title>
+    <!-- Using Inter font - common for modern UI -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <!-- Updated FontAwesome -->
+
+    <style>
+        /* Reset and Box Sizing */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* CSS Variables for Theming */
+        :root {
+            /* Light Theme */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-app: linear-gradient(135deg, #eef2f9, #f4f7fc); /* Subtle light gradient */
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --text-accent: #3b82f6; /* Example accent - Blue */
+            --text-on-accent: #ffffff;
+            --border-color: #e5e7eb;
+            --input-bg: #ffffff;
+            --input-border: #d1d5db;
+            --input-focus-border: var(--text-accent);
+            --input-focus-shadow: rgba(59, 130, 246, 0.25);
+            --button-primary-bg: var(--text-accent);
+            --button-primary-hover-bg: #2563eb;
+            --button-secondary-bg: #f3f4f6;
+            --button-secondary-hover-bg: #e5e7eb;
+            --button-secondary-text: var(--text-secondary);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --success-color: #10b981;
+
+            /* Shared Variables */
+            --border-radius-sm: 0.375rem; /* 6px */
+            --border-radius-md: 0.5rem;   /* 8px */
+            --border-radius-lg: 0.75rem;  /* 12px */
+            --transition-fast: all 0.2s ease-in-out;
+            --transition-medium: all 0.3s ease;
+        }
+
+        .dark {
+            /* Dark Theme Overrides */
+            --bg-primary: #1a1d21; /* Slightly off-black */
+            --bg-secondary: #24282f; /* Darker secondary */
+            --bg-app: linear-gradient(135deg, #111315, #1a1d21); /* Subtle dark gradient */
+            --text-primary: #f3f4f6; /* Light gray */
+            --text-secondary: #9ca3af; /* Medium gray */
+            --text-accent: #60a5fa; /* Lighter blue for dark mode */
+            --text-on-accent: #111827;
+            --border-color: #374151; /* Darker border */
+            --input-bg: #2d333a;
+            --input-border: #4b5563;
+            --input-focus-border: var(--text-accent);
+            --input-focus-shadow: rgba(96, 165, 250, 0.3);
+            --button-primary-bg: var(--text-accent);
+            --button-primary-hover-bg: #3b82f6;
+            --button-secondary-bg: #374151;
+            --button-secondary-hover-bg: #4b5563;
+            --button-secondary-text: var(--text-primary);
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --success-color: #34d399; /* Slightly brighter success for dark */
+        }
+
+        /* Base Body Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-app);
+            padding: 1.5rem; /* Reduced padding on small screens */
+            color: var(--text-primary);
+            transition: background var(--transition-medium), color var(--transition-medium);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* App Container */
+        .app-container {
+            width: 100%;
+            max-width: 900px; /* Max width */
+            min-height: 700px;
+            background: var(--bg-primary);
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: 0 10px 25px -5px var(--shadow-color), 0 8px 10px -6px var(--shadow-color);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border-color);
+            transition: background var(--transition-medium), border-color var(--transition-medium);
+            position: relative; /* Needed for absolute positioning inside */
+        }
+
+        /* Header */
+        .header {
+            padding: 1.25rem 2rem; /* Slightly adjusted padding */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            transition: background var(--transition-medium), border-color var(--transition-medium);
+            z-index: 10;
+            flex-shrink: 0; /* Prevent header from shrinking */
+        }
+
+        .logo {
+            font-size: 1.375rem; /* Slightly smaller */
+            font-weight: 600; /* Semibold */
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: color var(--transition-medium);
+        }
+
+        .logo-icon {
+            font-size: 1.5rem;
+            color: var(--text-accent); /* Use accent color */
+            transition: color var(--transition-medium);
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* Dropdowns */
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-wrapper::after {
+            content: '\f078'; /* Font Awesome chevron-down */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            transition: color var(--transition-medium);
+        }
+
+        .guide-dropdown, .language-dropdown {
+            appearance: none;
+            padding: 0.5rem 2.2rem 0.5rem 0.8rem; /* Adjusted padding */
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--input-border);
+            background: var(--input-bg);
+            font-size: 0.875rem; /* Slightly smaller text */
+            font-weight: 500;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            min-width: 10rem; /* Minimum width */
+        }
+
+        .guide-dropdown:hover, .language-dropdown:hover {
+            border-color: var(--input-focus-border);
+        }
+
+        .guide-dropdown:focus, .language-dropdown:focus {
+            outline: none;
+            border-color: var(--input-focus-border);
+            box-shadow: 0 0 0 3px var(--input-focus-shadow);
+        }
+
+        /* Theme Switch */
+        .theme-switch {
+            position: relative;
+            width: 44px; /* Slightly smaller */
+            height: 22px;
+        }
+
+        .theme-switch input { display: none; } /* Hide checkbox */
+
+        .theme-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #cbd5e1; /* Light mode off state */
+            border-radius: 22px;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+        }
+
+        .theme-slider:before { /* The circle knob */
+            content: "";
+            position: absolute;
+            height: 18px;
+            width: 18px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            border-radius: 50%;
+            transition: var(--transition-fast);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .theme-switch input:checked + .theme-slider {
+            background-color: var(--text-accent); /* Use accent color for on state */
+        }
+
+        .theme-switch input:checked + .theme-slider:before {
+            transform: translateX(22px);
+        }
+
+        /* Icons inside the switch */
+        .theme-switch .switch-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: var(--text-on-accent);
+            transition: opacity 0.15s ease-in-out;
+            pointer-events: none; /* Prevent icon interaction */
+        }
+        .theme-switch .sun-icon { left: 4px; opacity: 0; }
+        .theme-switch .moon-icon { right: 4px; opacity: 1; }
+
+        .dark .theme-switch .sun-icon { opacity: 1; }
+        .dark .theme-switch .moon-icon { opacity: 0; }
+        .dark .theme-slider { background-color: #4b5563; } /* Dark mode off state */
+        .dark .theme-slider:before { background-color: #1a1d21; }
+
+
+        /* Content Area */
+        .content {
+            flex: 1; /* Takes remaining space */
+            padding: 2.5rem 2rem; /* Adjusted padding */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Center content vertically */
+            background-color: var(--bg-secondary);
+            transition: background-color var(--transition-medium);
+            position: relative; /* For step progress */
+            overflow-y: auto; /* Allow scrolling if content overflows */
+        }
+
+        .step-content {
+            width: 100%;
+            max-width: 600px; /* Max width for content */
+            min-height: 350px; /* Ensure minimum height */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out forwards; /* Smoother fade */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-number {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+            display: inline-block;
+            background-color: rgba(96, 165, 250, 0.1); /* Accent background */
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px; /* Pill shape */
+            transition: color var(--transition-medium), background-color var(--transition-medium);
+        }
+
+        .step-title {
+            font-size: 1.875rem; /* 30px */
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+            transition: color var(--transition-medium);
+        }
+
+        .step-description {
+            font-size: 1rem; /* 16px */
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 550px; /* Limit description width */
+            transition: color var(--transition-medium);
+        }
+
+    
+
+        /* Step Progress Indicators */
+        .step-progress-container {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 0.6rem; /* Increased gap */
+            padding: 0 1rem; /* Add padding to prevent sticking to edges */
+        }
+
+        .step-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--border-color);
+            transition: var(--transition-fast);
+        }
+
+        .step-indicator.active {
+            background-color: var(--text-accent);
+            transform: scale(1.3); /* Slightly larger active indicator */
+        }
+
+        /* Footer */
+        .footer {
+            padding: 1rem 2rem; /* Consistent padding */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            transition: background var(--transition-medium), border-color var(--transition-medium);
+            flex-shrink: 0; /* Prevent footer from shrinking */
+        }
+
+        /* Navigation Buttons */
+        .nav-button {
+            padding: 0.65rem 1.25rem; /* Adjusted padding */
+            border-radius: var(--border-radius-md);
+            font-size: 0.9rem; /* Slightly smaller text */
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            display: inline-flex; /* Use inline-flex for better alignment */
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border: 1px solid transparent; /* Add border for consistency */
+            line-height: 1.2; /* Ensure text vertical alignment */
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+
+        .prev-btn {
+            background-color: var(--button-secondary-bg);
+            border-color: var(--border-color); /* Use border color for secondary */
+            color: var(--button-secondary-text);
+        }
+
+        .prev-btn:hover:not(:disabled) {
+            background-color: var(--button-secondary-hover-bg);
+            border-color: var(--border-color); /* Keep border consistent */
+        }
+
+        .next-btn {
+            background-color: var(--button-primary-bg);
+            border-color: var(--button-primary-bg);
+            color: var(--text-on-accent);
+        }
+
+        .next-btn:hover:not(:disabled) {
+            background-color: var(--button-primary-hover-bg);
+            border-color: var(--button-primary-hover-bg);
+        }
+
+        .nav-button:focus-visible { /* Modern focus outline */
+             outline: 2px solid var(--input-focus-border);
+             outline-offset: 2px;
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: var(--button-secondary-bg); /* Consistent disabled look */
+            border-color: var(--border-color);
+            color: var(--text-secondary);
+        }
+        /* Ensure disabled next button doesn't keep primary color */
+        .next-btn:disabled {
+             background-color: var(--button-secondary-bg);
+             border-color: var(--border-color);
+             color: var(--text-secondary);
+        }
+
+
+        /* Completion / Celebration Styles */
+        .celebration {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 5;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 8px; height: 8px; /* Smaller confetti */
+            opacity: 0.9;
+            animation: fall 3s ease-out infinite;
+            transform-origin: center;
+        }
+        /* Define shapes using clip-path or border-radius */
+        .confetti.square { width: 6px; height: 10px; border-radius: 0; }
+        .confetti.triangle { width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 8px solid; opacity: 1; /* Needs color set directly */}
+        .confetti.circle { border-radius: 50%; }
+
+        /* Assign colors and manage animation delays */
+        .confetti:nth-child(1) { background: #fecaca; left: 10%; animation-delay: 0s; }
+        .confetti:nth-child(2) { background: #a5f3fc; left: 20%; animation-delay: -0.2s; }
+        .confetti:nth-child(3) { background: #bbf7d0; left: 30%; animation-delay: -0.4s; }
+        .confetti:nth-child(4) { background: #fef08a; left: 40%; animation-delay: -0.6s; }
+        .confetti:nth-child(5) { background: #fed7aa; left: 50%; animation-delay: -0.8s; }
+        .confetti:nth-child(6) { background: #fbcfe8; left: 60%; animation-delay: -1s; }
+        .confetti:nth-child(7) { background: #c7d2fe; left: 70%; animation-delay: -1.2s; }
+        .confetti:nth-child(8) { background: #ddd6fe; left: 80%; animation-delay: -1.4s; }
+        .confetti:nth-child(9) { background: #bfdbfe; left: 90%; animation-delay: -1.6s; }
+        .confetti:nth-child(10) { background: #fecdd3; left: 15%; animation-delay: -1.8s; }
+        /* Add more if needed */
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotateZ(0deg) scale(1); opacity: 1; }
+            100% { transform: translateY(100vh) rotateZ(720deg) scale(0.8); opacity: 0; }
+        }
+
+        .success-checkmark {
+            width: 70px; height: 70px; /* Slightly smaller */
+            margin: 0 auto 1.5rem; /* Adjusted margin */
+            border-radius: 50%;
+            background-color: var(--success-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.2rem;
+            animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 10px -2px rgba(16, 185, 129, 0.4); /* Subtle shadow */
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .app-container {
+                min-height: 90vh; /* Use viewport height */
+                border-radius: var(--border-radius-md); /* Slightly smaller radius */
+            }
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            .controls {
+                width: 100%;
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            .select-wrapper { width: 100%; }
+            .guide-dropdown, .language-dropdown { width: 100%; }
+            .content { padding: 1.5rem 1rem; } /* Reduced padding */
+            .step-content { min-height: 300px; }
+            .step-title { font-size: 1.5rem; }
+            .step-description { font-size: 0.95rem; }
+            .footer {
+                 padding: 0.75rem 1rem;
+                 flex-direction: row; /* Keep row layout but adjust */
+                 justify-content: space-between; /* Spread buttons */
+            }
+            .nav-button {
+                padding: 0.6rem 1rem;
+                font-size: 0.875rem;
+                flex-grow: 1; /* Allow buttons to grow */
+                text-align: center; /* Center text inside */
+            }
+            .prev-btn { margin-right: 0.5rem; } /* Add small gap */
+            .next-btn { margin-left: 0.5rem; }
+
+            .step-progress-container { bottom: 1rem; }
+        }
+
+         @media (max-width: 480px) {
+             .logo { font-size: 1.2rem; }
+             .logo-icon { font-size: 1.3rem; }
+             .step-title { font-size: 1.3rem; }
+             .step-description { font-size: 0.9rem; }
+             .footer { flex-wrap: wrap; gap: 0.5rem; } /* Allow wrapping if needed */
+             .nav-button { flex-basis: 48%; flex-grow: 0; } /* Near 50% width */
+             .prev-btn { margin-right: 0; }
+             .next-btn { margin-left: 0; }
+         }
+
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <div class="logo">
+                <!-- Replaced unicode with Font Awesome icon -->
+                <i class="fas fa-mountain-sun logo-icon"></i>
+                <span>Sherpa</span>
+            </div>
+            <div class="controls">
+                <div class="select-wrapper">
+                    <select class="guide-dropdown" id="guide-select">
+                        <option value="itsmebank">itsme® via Bank</option>
+                        <option value="itsmeID">itsme via eID</option>
+                        <option value="jobbonus">Jobbonus Application</option>
+                    </select>
+                </div>
+                <div class="select-wrapper">
+                    <select class="language-dropdown" id="language-select">
+                        <option value="english">English</option>
+                        <option value="dutch">Nederlands</option>
+                        <option value="bulgarian">Български</option>
+                        <option value="turkish">Türkçe</option>
+                        <option value="arabic">العربية</option>
+                        <option value="ukrainian">Українська</option>
+                        <option value="pashto">پښتو</option>
+                        <option value="spanish">Español</option>
+                    </select>
+                </div>
+                <label class="theme-switch" title="Toggle theme">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="theme-slider">
+                         <!-- Icons inside the slider -->
+                         <i class="fas fa-sun switch-icon sun-icon"></i>
+                         <i class="fas fa-moon switch-icon moon-icon"></i>
+                    </span>
+                </label>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="step-content">
+                <div class="step-number" id="step-number"></div>
+                <h1 class="step-title" id="step-title"></h1>
+                <p class="step-description" id="step-description"></p>
+                <!-- Illustration will be shown/hidden via JS -->
+                <img id="step-illustration" class="illustration" src="" alt="Step Illustration" style="display: none;">
+                 <!-- Completion Checkmark (replaces illustration on last step) -->
+                <div id="completion-indicator"></div>
+            </div>
+             <!-- Moved progress outside step-content but inside content -->
+            <div class="step-progress-container" id="progress-indicators"></div>
+             <!-- Celebration overlay -->
+            <div class="celebration" id="celebration-container"></div>
+        </div>
+
+        <div class="footer">
+            <button class="nav-button prev-btn" id="prev-button">
+                <i class="fas fa-arrow-left"></i> <!-- Changed icon -->
+                <span id="prev-text">Previous</span>
+            </button>
+            <button class="nav-button next-btn" id="next-button">
+                <span id="next-text">Next</span>
+                <i class="fas fa-arrow-right"></i> <!-- Changed icon -->
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Step illustrations - placeholder image URLs (REPLACE THESE!)
+        const stepImages = {
+            // Use more descriptive keys if possible
+            itsmebank: [
+               
+                null // No image for the final success step, completion indicator is used
+            ],
+            itsmeID: [
+               
+                null // No image for success
+            ],
+            jobbonus: [
+                
+                 // Add more placeholders if needed for jobbonus steps
+                 null // No image for success
+            ]
+        };
+
+        // Guide Content (Shortened for brevity, assumes you have the full content)
+        const guides = {
+            itsmebank: {
+                english: [
+                    { title: "Download the itsme® app", content: "Start by downloading the itsme® app on your smartphone from the App Store or Google Play. The app is free and requires iOS 13+ or Android 6.0+." },
+                    { title: "Enter your phone number", content: "Open the app and enter your mobile phone number. Make sure to use the number associated with your bank account for seamless verification." },
+                    { title: "Choose your bank", content: "Select your bank from the list of supported financial institutions to create your itsme® account. This establishes a secure connection between your bank and the itsme® service." },
+                    { title: "Follow bank instructions", content: "You'll be redirected to your bank's app or website. Follow their specific authentication process, which may include logging in with your credentials and confirming your identity." },
+                    { title: "Enter verification code", content: "You'll receive an SMS with a verification code. Enter this code in the itsme® app to confirm your phone number ownership and continue the setup process." },
+                    { title: "Set up authentication", content: "Create a secure 5-digit PIN code for your itsme® account, or enable biometric authentication (fingerprint or Face ID) for added convenience and security." },
+                    { title: "Confirmation", content: "You'll receive an SMS confirming your itsme® account creation. For full functionality, ensure your eID card has been recently read at your bank branch or using a compatible card reader." },
+                    { title: "Ready to use!", content: "Congratulations! Your itsme® account is now set up and ready to use. You can now use itsme® to securely log in to government services, banking apps, and other supported platforms with just your PIN or biometrics." }
+                ],
+                dutch: [
+                    { title: "Download de itsme®-app", content: "Begin met het downloaden van de itsme®-app op je smartphone via de App Store of Google Play. De app is gratis en vereist iOS 13+ of Android 6.0+." },
+                    { title: "Voer je telefoonnummer in", content: "Open de app en voer je mobiele telefoonnummer in. Zorg ervoor dat je het nummer gebruikt dat gekoppeld is aan je bankrekening voor een naadloze verificatie." },
+                    { title: "Kies je bank", content: "Selecteer je bank uit de lijst met ondersteunde financiële instellingen om je itsme®-account aan te maken. Dit creëert een beveiligde verbinding tussen je bank en de itsme®-service." },
+                    { title: "Volg de bankinstructies", content: "Je wordt doorgestuurd naar de app of website van je bank. Volg het specifieke authenticatieproces, inclusief inloggen met je gegevens en het bevestigen van je identiteit." },
+                    { title: "Voer de verificatiecode in", content: "Je ontvangt een sms met een verificatiecode. Voer deze code in in de itsme®-app om je telefoonnummer te bevestigen en de installatie voort te zetten." },
+                    { title: "Stel authenticatie in", content: "Maak een veilige 5-cijferige pincode aan voor je itsme®-account, of schakel biometrische authenticatie (vingerafdruk of Face ID) in voor extra gemak en veiligheid." },
+                    { title: "Bevestiging", content: "Je ontvangt een sms ter bevestiging van je itsme®-account. Voor volledige functionaliteit, zorg ervoor dat je eID-kaart recentelijk is uitgelezen in je bankkantoor of met een compatibele kaartlezer." },
+                    { title: "Klaar voor gebruik!", content: "Gefeliciteerd! Je itsme®-account is nu ingesteld en klaar voor gebruik. Je kunt itsme® nu gebruiken om veilig in te loggen bij overheidsdiensten, bank-apps en andere ondersteunde platforms met alleen je pincode of biometrie." }
+                ],
+                bulgarian: [
+                    { title: "Изтеглете приложението itsme®", content: "Започнете, като изтеглите приложението itsme® на вашия смартфон от App Store или Google Play. Приложението е безплатно и изисква iOS 13+ или Android 6.0+." },
+                    { title: "Въведете своя телефонен номер", content: "Отворете приложението и въведете своя мобилен телефонен номер. Уверете се, че използвате номера, свързан с вашата банкова сметка, за безпроблемна проверка." },
+                    { title: "Изберете вашата банка", content: "Изберете вашата банка от списъка с поддържани финансови институции, за да създадете своя акаунт в itsme®. Това установява сигурна връзка между вашата банка и услугата itsme®." },
+                    { title: "Следвайте инструкциите на банката", content: "Ще бъдете пренасочени към приложението или уебсайта на вашата банка. Следвайте техния специфичен процес на автентикация, който може да включва влизане с вашите данни и потвърждаване на самоличността ви." },
+                    { title: "Въведете кода за потвърждение", content: "Ще получите SMS с код за потвърждение. Въведете този код в приложението itsme®, за да потвърдите собствеността на вашия телефонен номер и да продължите процеса на настройка." },
+                    { title: "Настройте автентикацията", content: "Създайте сигурен 5-цифрен ПИН код за вашия акаунт в itsme® или активирайте биометрична автентикация (пръстов отпечатък или Face ID) за допълнително удобство и сигурност." },
+                    { title: "Потвърждение", content: "Ще получите SMS, потвърждаващ създаването на вашия акаунт в itsme®. За пълна функционалност, уверете се, че вашата eID карта е била наскоро прочетена във вашия банков клон или с помощта на съвместимо четящо устройство." },
+                    { title: "Готово за използване!", content: "Поздравления! Вашият акаунт в itsme® вече е настроен и готов за използване. Сега можете да използвате itsme®, за да влизате сигурно в държавни услуги, банкови приложения и други поддържани платформи само с вашия ПИН код или биометрия." }
+                ],
+                turkish: [
+                    { title: "itsme® uygulamasını indirin", content: "App Store veya Google Play'den akıllı telefonunuza itsme® uygulamasını indirerek başlayın. Uygulama ücretsizdir ve iOS 13+ veya Android 6.0+ gerektirir." },
+                    { title: "Telefon numaranızı girin", content: "Uygulamayı açın ve cep telefonu numaranızı girin. Sorunsuz doğrulama için banka hesabınızla ilişkili numarayı kullandığınızdan emin olun." },
+                    { title: "Bankanızı seçin", content: "itsme® hesabınızı oluşturmak için desteklenen finansal kurumlar listesinden bankanızı seçin. Bu, bankanız ve itsme® hizmeti arasında güvenli bir bağlantı kurar." },
+                    { title: "Banka talimatlarını takip edin", content: "Bankanızın uygulamasına veya web sitesine yönlendirileceksiniz. Kimlik bilgilerinizle oturum açmayı ve kimliğinizi onaylamayı içerebilecek özel kimlik doğrulama sürecini izleyin." },
+                    { title: "Doğrulama kodunu girin", content: "Bir doğrulama kodu içeren bir SMS alacaksınız. Telefon numaranızın sahipliğini onaylamak ve kurulum işlemine devam etmek için bu kodu itsme® uygulamasına girin." },
+                    { title: "Kimlik doğrulamayı ayarlayın", content: "itsme® hesabınız için güvenli bir 5 haneli PIN kodu oluşturun veya ek kolaylık ve güvenlik için biyometrik kimlik doğrulamayı (parmak izi veya Face ID) etkinleştirin." },
+                    { title: "Onay", content: "itsme® hesabınızın oluşturulduğunu onaylayan bir SMS alacaksınız. Tam işlevsellik için, eID kartınızın yakın zamanda banka şubenizde veya uyumlu bir kart okuyucu kullanılarak okunduğundan emin olun." },
+                    { title: "Kullanıma hazır!", content: "Tebrikler! itsme® hesabınız şimdi kuruldu ve kullanıma hazır. Artık itsme®'yi sadece PIN kodunuz veya biyometrinizle devlet hizmetlerine, bankacılık uygulamalarına ve diğer desteklenen platformlara güvenle giriş yapmak için kullanabilirsiniz." }
+                ],
+                arabic: [
+                    { title: "قم بتنزيل تطبيق itsme®", content: "ابدأ بتنزيل تطبيق itsme® على هاتفك الذكي من App Store أو Google Play. التطبيق مجاني ويتطلب iOS 13+ أو Android 6.0+." },
+                    { title: "أدخل رقم هاتفك", content: "افتح التطبيق وأدخل رقم هاتفك المحمول. تأكد من استخدام الرقم المرتبط بحسابك المصرفي للتحقق السلس." },
+                    { title: "اختر بنكك", content: "حدد بنكك من قائمة المؤسسات المالية المدعومة لإنشاء حساب itsme® الخاص بك. هذا ينشئ اتصالًا آمنًا بين بنكك وخدمة itsme®." },
+                    { title: "اتبع تعليمات البنك", content: "ستتم إعادة توجيهك إلى تطبيق البنك أو موقع الويب الخاص به. اتبع عملية المصادقة الخاصة بهم، والتي قد تشمل تسجيل الدخول باستخدام بيانات اعتمادك وتأكيد هويتك." },
+                    { title: "أدخل رمز التحقق", content: "ستتلقى رسالة نصية تحتوي على رمز تحقق. أدخل هذا الرمز في تطبيق itsme® لتأكيد ملكية رقم هاتفك ومتابعة عملية الإعداد." },
+                    { title: "إعداد المصادقة", content: "قم بإنشاء رمز PIN مكون من 5 أرقام آمن لحساب itsme® الخاص بك، أو قم بتمكين المصادقة البيومترية (بصمة الإصبع أو Face ID) لمزيد من الراحة والأمان." },
+                    { title: "التأكيد", content: "ستتلقى رسالة نصية تؤكد إنشاء حساب itsme® الخاص بك. للحصول على وظائف كاملة، تأكد من قراءة بطاقة eID الخاصة بك مؤخرًا في فرع البنك الخاص بك أو باستخدام قارئ بطاقة متوافق." },
+                    { title: "جاهز للاستخدام!", content: "تهانينا! تم إعداد حساب itsme® الخاص بك الآن وجاهز للاستخدام. يمكنك الآن استخدام itsme® لتسجيل الدخول بأمان إلى الخدمات الحكومية وتطبيقات البنوك والمنصات الأخرى المدعومة باستخدام رمز PIN أو القياسات الحيوية فقط." }
+                ],
+                ukrainian: [
+                    { title: "Завантажте додаток itsme®", content: "Почніть із завантаження додатку itsme® на свій смартфон з App Store або Google Play. Додаток безкоштовний і потребує iOS 13+ або Android 6.0+." },
+                    { title: "Введіть номер телефону", content: "Відкрийте додаток та введіть свій мобільний номер телефону. Використовуйте номер, пов'язаний з вашим банківським рахунком для безперебійної перевірки." },
+                    { title: "Оберіть свій банк", content: "Виберіть свій банк зі списку підтримуваних фінансових установ для створення облікового запису itsme®. Це встановлює безпечне з'єднання між вашим банком та сервісом itsme®." },
+                    { title: "Дотримуйтесь інструкцій банку", content: "Вас буде перенаправлено до додатку чи веб-сайту вашого банку. Дотримуйтесь їхнього специфічного процесу автентифікації, який може включати вхід з вашими обліковими даними та підтвердження вашої особи." },
+                    { title: "Введіть код підтвердження", content: "Ви отримаєте SMS з кодом підтвердження. Введіть цей код у додатку itsme®, щоб підтвердити власність вашого номера телефону та продовжити процес налаштування." },
+                    { title: "Налаштуйте автентифікацію", content: "Створіть безпечний 5-значний PIN-код для вашого облікового запису itsme® або активуйте біометричну автентифікацію (відбиток пальця або Face ID) для додаткової зручності та безпеки." },
+                    { title: "Підтвердження", content: "Ви отримаєте SMS, що підтверджує створення вашого облікового запису itsme®. Для повної функціональності переконайтеся, що вашу карту eID було нещодавно зчитано у відділенні вашого банку або за допомогою сумісного пристрою для зчитування карток." },
+                    { title: "Готово до використання!", content: "Вітаємо! Ваш обліковий запис itsme® тепер налаштовано та готовий до використання. Тепер ви можете використовувати itsme® для безпечного входу до державних служб, банківських додатків та інших підтримуваних платформ лише з PIN-кодом або біометрією." }
+                ],
+                pashto: [
+                    { title: "د itsme® اپلیکیشن ډاونلوډ کړئ", content: "د App Store یا Google Play څخه په خپل هوښیار تلیفون کې د itsme® اپلیکیشن ډاونلوډ کولو سره پیل وکړئ. اپلیکیشن وړیا دی او iOS 13+ یا Android 6.0+ ته اړتیا لري." },
+                    { title: "خپل د تلیفون شمیره داخله کړئ", content: "اپلیکیشن خلاص کړئ او خپله موبایل تلیفون شمیره داخله کړئ. ډاډ ترلاسه کړئ چې تاسو هغه شمیره وکاروئ چې ستاسو د بانک حساب سره تړاو لري د اسانه تصدیق لپاره." },
+                    { title: "خپل بانک وټاکئ", content: "د itsme® حساب جوړولو لپاره د ملاتړ شوي مالي ادارو له لیست څخه خپل بانک وټاکئ. دا ستاسو د بانک او د itsme® خدمت ترمنځ خوندي اړیکه رامینځته کوي." },
+                    { title: "د بانک لارښوونې تعقیب کړئ", content: "تاسو به ستاسو د بانک اپلیکیشن یا ویب پاڼې ته بیا مخ شئ. د هغوی د ځانګړي تصدیق پروسه تعقیب کړئ، چې ښایي ستاسو د اعتبار سره ننوتل او ستاسو د هویت تصدیقول شامل وي." },
+                    { title: "د تایید کوډ داخل کړئ", content: "تاسو به د تایید کوډ سره یو SMS ترلاسه کړئ. دا کوډ په itsme® اپلیکیشن کې داخل کړئ ترڅو ستاسو د تلیفون شمیرې مالکیت تصدیق کړئ او د تنظیم پروسه دوام وکړئ." },
+                    { title: "تصدیق تنظیم کړئ", content: "د خپل itsme® حساب لپاره د ۵ رقمي خوندي PIN کوډ جوړ کړئ، یا د نور اسانتیا او امنیت لپاره بیومیټریک تصدیق (د ګوتې نښه یا Face ID) فعال کړئ." },
+                    { title: "تایید", content: "تاسو به ستاسو د itsme® حساب جوړولو د تایید لپاره یو SMS ترلاسه کړئ. د بشپړ کارولو لپاره، ډاډ ترلاسه کړئ چې ستاسو eID کارت په دې وروستیو کې ستاسو د بانک په څانګه کې یا د موافق کارت لوستونکي په کارولو سره لوستل شوی دی." },
+                    { title: "د کارولو لپاره چمتو!", content: "مبارک شه! ستاسو د itsme® حساب اوس تنظیم شوی او د کارولو لپاره چمتو دی. تاسو اوس کولی شئ itsme® وکاروئ ترڅو دولتي خدمتونو، بانکي اپلیکیشنونو، او نورو ملاتړ شوي پلیټفارمونو ته یوازې ستاسو د PIN یا بیومیټریک سره په خوندي توګه ننوځئ." }
+                ],
+                spanish: [
+                    { title: "Descarga la aplicación itsme®", content: "Comienza descargando la aplicación itsme® en tu smartphone desde la App Store o Google Play. La aplicación es gratuita y requiere iOS 13+ o Android 6.0+." },
+                    { title: "Ingresa tu número de teléfono", content: "Abre la aplicación e ingresa tu número de teléfono móvil. Asegúrate de usar el número asociado con tu cuenta bancaria para una verificación sin problemas." },
+                    { title: "Elige tu banco", content: "Selecciona tu banco de la lista de instituciones financieras compatibles para crear tu cuenta itsme®. Esto establece una conexión segura entre tu banco y el servicio itsme®." },
+                    { title: "Sigue las instrucciones del banco", content: "Serás redirigido a la aplicación o sitio web de tu banco. Sigue su proceso de autenticación específico, que puede incluir iniciar sesión con tus credenciales y confirmar tu identidad." },
+                    { title: "Ingresa el código de verificación", content: "Recibirás un SMS con un código de verificación. Ingresa este código en la aplicación itsme® para confirmar la propiedad de tu número de teléfono y continuar con el proceso de configuración." },
+                    { title: "Configura la autenticación", content: "Crea un código PIN seguro de 5 dígitos para tu cuenta itsme®, o habilita la autenticación biométrica (huella digital o Face ID) para mayor comodidad y seguridad." },
+                    { title: "Confirmación", content: "Recibirás un SMS confirmando la creación de tu cuenta itsme®. Para una funcionalidad completa, asegúrate de que tu tarjeta eID haya sido leída recientemente en tu sucursal bancaria o usando un lector de tarjetas compatible." },
+                    { title: "¡Listo para usar!", content: "¡Felicitaciones! Tu cuenta itsme® ahora está configurada y lista para usar. Ahora puedes usar itsme® para iniciar sesión de forma segura en servicios gubernamentales, aplicaciones bancarias y otras plataformas compatibles con solo tu PIN o biometría." }
+                ]
+            },
+            itsmeID: {
+    english: [
+        { title: "Download the itsme® App", content: "Install the itsme® app from the App Store (iOS) or Google Play Store (Android) on your smartphone." },
+        { title: "Prepare Your eID and Card Reader", content: "Have your Belgian eID card and a compatible card reader ready. You’ll also need your eID PIN code." },
+        { title: "Start Activation", content: "Open the itsme® app, select 'Activate with eID,' and go to my.itsme-id.com/account/activate on your computer or tablet." },
+        { title: "Enter Phone Number", content: "In the app, provide your mobile phone number and confirm it with the code sent via SMS." },
+        { title: "Connect eID to Card Reader", content: "Insert your eID into the card reader, connect it to your computer, and enter your PIN code when prompted on the website." },
+        { title: "Set Up Authentication", content: "Choose a 5-digit itsme® code in the app or activate biometric authentication (fingerprint or Face ID) if your phone supports it." },
+        { title: "Confirm Activation", content: "Follow the final instructions in the app and on the website to link your eID to your itsme® account." },
+        { title: "Success!", content: "Congratulations! Your itsme® account is now activated with your eID." }
+    ],
+    dutch: [
+        { title: "Download de itsme®-app", content: "Installeer de itsme®-app vanuit de App Store (iOS) of Google Play Store (Android) op je smartphone." },
+        { title: "Bereid je eID en Kaartlezer voor", content: "Zorg dat je je Belgische eID-kaart en een compatibele kaartlezer bij de hand hebt. Je hebt ook je eID-pincode nodig." },
+        { title: "Start de Activering", content: "Open de itsme®-app, kies 'Activeren met eID' en ga naar my.itsme-id.com/account/activate op je computer of tablet." },
+        { title: "Voer Telefoonnummer in", content: "Geef in de app je mobiele telefoonnummer op en bevestig het met de code die je via sms ontvangt." },
+        { title: "Verbind eID met Kaartlezer", content: "Steek je eID in de kaartlezer, sluit deze aan op je computer en voer je pincode in wanneer dit op de website wordt gevraagd." },
+        { title: "Stel Authenticatie in", content: "Kies een 5-cijferige itsme®-code in de app of activeer biometrische authenticatie (vingerafdruk of Face ID) als je telefoon dit ondersteunt." },
+        { title: "Bevestig Activering", content: "Volg de laatste instructies in de app en op de website om je eID aan je itsme®-account te koppelen." },
+        { title: "Gelukt!", content: "Gefeliciteerd! Je itsme®-account is nu geactiveerd met je eID." }
+    ],
+    bulgarian: [
+        { title: "Изтеглете приложението itsme®", content: "Инсталирайте приложението itsme® от App Store (iOS) или Google Play Store (Android) на вашия смартфон." },
+        { title: "Подгответе eID и Четец на Карти", content: "Уверете се, че имате белгийската си eID карта и съвместим четец на карти. Ще ви трябва и ПИН кодът за eID." },
+        { title: "Започнете Активирането", content: "Отворете приложението itsme®, изберете 'Активиране с eID' и отидете на my.itsme-id.com/account/activate на вашия компютър или таблет." },
+        { title: "Въведете Телефонен Номер", content: "В приложението посочете мобилния си телефонен номер и го потвърдете с кода, изпратен чрез SMS." },
+        { title: "Свържете eID с Четеца", content: "Поставете eID в четеца на карти, свържете го към компютъра и въведете ПИН кода, когато бъдете подканени на уебсайта." },
+        { title: "Настройте Аутентикация", content: "Изберете 5-цифрен код за itsme® в приложението или активирайте биометрична аутентикация (пръстов отпечатък или Face ID), ако телефонът ви го поддържа." },
+        { title: "Потвърдете Активирането", content: "Следвайте последните инструкции в приложението и на уебсайта, за да свържете eID с вашия itsme® акаунт." },
+        { title: "Успех!", content: "Честито! Вашият itsme® акаунт е активиран с вашата eID." }
+    ],
+    turkish: [
+        { title: "itsme® Uygulamasını İndir", content: "itsme® uygulamasını App Store (iOS) veya Google Play Store (Android) üzerinden akıllı telefonunuza yükleyin." },
+        { title: "eID ve Kart Okuyucuyu Hazırla", content: "Belçika eID kartınızı ve uyumlu bir kart okuyucuyu hazır bulundurun. Ayrıca eID PIN koduna ihtiyacınız olacak." },
+        { title: "Aktivasyonu Başlat", content: "itsme® uygulamasını açın, 'eID ile Aktive Et'i seçin ve bilgisayarınızdan veya tabletinizden my.itsme-id.com/account/activate adresine gidin." },
+        { title: "Telefon Numarasını Gir", content: "Uygulamada cep telefonu numaranızı girin ve SMS ile gönderilen kodu kullanarak doğrulayın." },
+        { title: "eID’yi Kart Okuyucuya Bağla", content: "eID’nizi kart okuyucuya takın, okuyucuyu bilgisayara bağlayın ve web sitesinde istendiğinde PIN kodunuzu girin." },
+        { title: "Kimlik Doğrulamayı Ayarla", content: "Uygulamada 5 haneli bir itsme® kodu seçin veya telefonunuz destekliyorsa biyometrik doğrulamayı (parmak izi veya Face ID) etkinleştirin." },
+        { title: "Aktivasyonu Onayla", content: "Uygulamadaki ve web sitesindeki son talimatları takip ederek eID’nizi itsme® hesabınıza bağlayın." },
+        { title: "Başarılı!", content: "Tebrikler! itsme® hesabınız eID ile başarıyla etkinleştirildi." }
+    ],
+    arabic: [
+        { title: "قم بتنزيل تطبيق itsme®", content: "قم بتثبيت تطبيق itsme® من App Store (iOS) أو Google Play Store (Android) على هاتفك الذكي." },
+        { title: "جهز بطاقة eID وقارئ البطاقات", content: "تأكد من أن لديك بطاقة eID البلجيكية وقارئ بطاقات متوافق. ستحتاج أيضًا إلى رمز PIN الخاص بـ eID." },
+        { title: "ابدأ التفعيل", content: "افتح تطبيق itsme®، اختر 'التفعيل باستخدام eID'، وانتقل إلى my.itsme-id.com/account/activate على جهاز الكمبيوتر أو التابلت." },
+        { title: "أدخل رقم الهاتف", content: "في التطبيق، أدخل رقم هاتفك المحمول وأكده باستخدام الرمز المرسل عبر SMS." },
+        { title: "ربط eID بقارئ البطاقات", content: "أدخل بطاقة eID في قارئ البطاقات، قم بتوصيله بالكمبيوتر، وأدخل رمز PIN عندما يُطلب منك ذلك على الموقع." },
+        { title: "إعداد المصادقة", content: "اختر رمز itsme® مكون من 5 أرقام في التطبيق أو فعّل المصادقة البيومترية (بصمة الإصبع أو Face ID) إذا كان هاتفك يدعمها." },
+        { title: "تأكيد التفعيل", content: "اتبع التعليمات النهائية في التطبيق وعلى الموقع لربط eID بحساب itsme® الخاص بك." },
+        { title: "نجاح!", content: "مبروك! تم تفعيل حساب itsme® الخاص بك باستخدام eID." }
+    ],
+    ukrainian: [
+        { title: "Завантажте додаток itsme®", content: "Встановіть додаток itsme® з App Store (iOS) або Google Play Store (Android) на свій смартфон." },
+        { title: "Підготуйте eID та Зчитувач Карт", content: "Переконайтеся, що у вас є бельгійська eID-карта та сумісний зчитувач карт. Вам також знадобиться PIN-код eID." },
+        { title: "Розпочніть Активацію", content: "Відкрийте додаток itsme®, виберіть 'Активувати за допомогою eID' і перейдіть на my.itsme-id.com/account/activate з комп’ютера або планшета." },
+        { title: "Введіть Номер Телефону", content: "У додатку вкажіть свій номер мобільного телефону та підтвердьте його кодом, отриманим через SMS." },
+        { title: "Підключіть eID до Зчитувача", content: "Вставте eID у зчитувач карт, підключіть його до комп’ютера та введіть PIN-код, коли це буде запропоновано на сайті." },
+        { title: "Налаштуйте Аутентифікацію", content: "Оберіть 5-значний код itsme® у додатку або активуйте біометричну аутентифікацію (відбиток пальця або Face ID), якщо ваш телефон це підтримує." },
+        { title: "Підтвердіть Активацію", content: "Дотримуйтесь останніх інструкцій у додатку та на сайті, щоб пов’язати eID із вашим обліковим записом itsme®." },
+        { title: "Успіх!", content: "Вітаємо! Ваш обліковий запис itsme® активовано за допомогою eID." }
+    ],
+    pashto: [
+        { title: "د itsme® اپلیکیشن ډاونلوډ کړئ", content: "د itsme® اپلیکیشن له App Store (iOS) یا Google Play Store (Android) څخه په خپل سمارټ فون کې نصب کړئ." },
+        { title: "خپل eID او کارت لوستونکی چمتو کړئ", content: "ډاډ ترلاسه کړئ چې تاسو خپله بلجیمي eID کارت او یو مناسب کارت لوستونکی لرئ. تاسو به د eID پین کوډ ته هم اړتیا ولرئ." },
+        { title: "فعالول پیل کړئ", content: "د itsme® اپلیکیشن خلاص کړئ، 'د eID سره فعالول' غوره کړئ او په خپل کمپیوټر یا ټابلیټ کې my.itsme-id.com/account/activate ته لاړ شئ." },
+        { title: "د تلیفون شمیره داخل کړئ", content: "په اپلیکیشن کې خپله د موبایل تلیفون شمیره ورکړئ او د SMS له لارې لیږل شوي کوډ سره یې تایید کړئ." },
+        { title: "eID د کارت لوستونکي سره وصل کړئ", content: "خپل eID په کارت لوستونکي کې واچوئ، دا له کمپیوټر سره وصل کړئ او کله چې په ویب پاڼه کې غوښتنه وشي خپل پین کوډ داخل کړئ." },
+        { title: "تصدیق تنظیم کړئ", content: "په اپلیکیشن کې د 5 عددي itsme® کوډ غوره کړئ یا که ستاسو تلیفون ملاتړ کوي، بایومیټریک تصدیق (د ګوتې نښه یا Face ID) فعال کړئ." },
+        { title: "فعالول تایید کړئ", content: "په اپلیکیشن او ویب پاڼه کې وروستي لارښوونې تعقیب کړئ ترڅو خپل eID له خپل itsme® حساب سره وصل کړئ." },
+        { title: "بریالی!", content: "مبارکي! ستاسو itsme® حساب اوس ستاسو د eID سره فعال شوی دی." }
+    ],
+    spanish: [
+        { title: "Descarga la aplicación itsme®", content: "Instala la aplicación itsme® desde la App Store (iOS) o Google Play Store (Android) en tu smartphone." },
+        { title: "Prepara tu eID y Lector de Tarjetas", content: "Asegúrate de tener tu tarjeta eID belga y un lector de tarjetas compatible a mano. También necesitarás el código PIN de tu eID." },
+        { title: "Inicia la Activación", content: "Abre la aplicación itsme®, selecciona 'Activar con eID' y visita my.itsme-id.com/account/activate en tu computadora o tableta." },
+        { title: "Ingresa el Número de Teléfono", content: "En la aplicación, proporciona tu número de teléfono móvil y confírmalo con el código enviado por SMS." },
+        { title: "Conecta el eID al Lector", content: "Inserta tu eID en el lector de tarjetas, conéctalo a tu computadora e ingresa tu código PIN cuando se te solicite en el sitio web." },
+        { title: "Configura la Autenticación", content: "Elige un código itsme® de 5 dígitos en la aplicación o activa la autenticación biométrica (huella digital o Face ID) si tu teléfono lo soporta." },
+        { title: "Confirma la Activación", content: "Sigue las instrucciones finales en la aplicación y el sitio web para vincular tu eID a tu cuenta itsme®." },
+        { title: "¡Éxito!", content: "¡Felicidades! Tu cuenta itsme® ha sido activada con tu eID." }
+    ]
+},
+            jobbonus: {
+    english: [
+        { title: "Check Eligibility", content: "Ensure you’re an employee or statutory civil servant earning less than €3,000 gross per month in 2023 (full-time equivalent). You must live in Flanders and be under 65." },
+        { title: "Wait for Notification", content: "If eligible, you’ll receive a letter from the Flemish government between November and February with your bonus amount." },
+        { title: "Register Bank Account", content: "Log in to Mijn Burgerprofiel (burgerprofiel.be/jobbonus) with a digital key (e.g., itsme or eID) and enter your Belgian bank account number." },
+        { title: "Verify or Update", content: "If you’ve previously registered a bank account, check if it’s still correct. Update within 10 days if needed." },
+        { title: "Receive Payment", content: "Your jobbonus (up to €650 for full-time work) will be paid within a month of the letter, provided your account is registered." },
+        { title: "Done!", content: "Congratulations! You’ve successfully applied for your jobbonus." }
+    ],
+    dutch: [
+        { title: "Controleer Geschiktheid", content: "Zorg ervoor dat je een loontrekkende werknemer of statutair ambtenaar bent die in 2023 minder dan €3.000 bruto per maand verdiende (voltijds equivalent). Je moet in Vlaanderen wonen en jonger dan 65 zijn." },
+        { title: "Wacht op Bericht", content: "Als je in aanmerking komt, ontvang je tussen november en februari een brief van de Vlaamse overheid met het bonusbedrag." },
+        { title: "Registreer Rekeningnummer", content: "Log in op Mijn Burgerprofiel (burgerprofiel.be/jobbonus) met een digitale sleutel (bijv. itsme of eID) en voer je Belgische rekeningnummer in." },
+        { title: "Controleer of Werk Bij", content: "Als je al een rekeningnummer hebt geregistreerd, controleer of dit nog steeds klopt. Werk het binnen 10 dagen bij indien nodig." },
+        { title: "Ontvang Betaling", content: "Je jobbonus (tot €650 voor voltijds werk) wordt binnen een maand na de brief uitbetaald, mits je rekening is geregistreerd." },
+        { title: "Klaar!", content: "Gefeliciteerd! Je hebt je jobbonus succesvol aangevraagd." }
+    ],
+    bulgarian: [
+        { title: "Проверете Допустимост", content: "Уверете се, че сте нает служител или статутен държавен служител, печелещ по-малко от 3000 евро бруто на месец през 2023 г. (еквивалент на пълен работен ден). Трябва да живеете във Фландрия и да сте под 65 години." },
+        { title: "Изчакайте Известие", content: "Ако отговаряте на условията, ще получите писмо от фламандското правителство между ноември и февруари с размера на бонуса." },
+        { title: "Регистрирайте Банковата си Сметка", content: "Влезте в Mijn Burgerprofiel (burgerprofiel.be/jobbonus) с цифров ключ (напр. itsme или eID) и въведете номера на белгийската си банкова сметка." },
+        { title: "Проверете или Актуализирайте", content: "Ако вече сте регистрирали сметка, проверете дали тя все още е валидна. Актуализирайте в рамките на 10 дни, ако е необходимо." },
+        { title: "Получете Плащане", content: "Вашият бонус за работа (до 650 евро за пълно работно време) ще бъде изплатен в рамките на един месец от писмото, ако сметката ви е регистрирана." },
+        { title: "Готово!", content: "Честито! Успешно кандидатствахте за своя бонус за работа." }
+    ],
+    turkish: [
+        { title: "Uygunluğu Kontrol Et", content: "2023’te ayda brüt 3.000 euro’dan az kazanan bir ücretli çalışan veya yasal memur olduğunuzdan emin olun (tam zamanlı eşdeğeri). Flaman Bölgesi’nde yaşıyor ve 65 yaşın altında olmalısınız." },
+        { title: "Bildirimi Bekle", content: "Uygunsanız, Kasım ile Şubat arasında Flaman hükümetinden bonus miktarınızı içeren bir mektup alacaksınız." },
+        { title: "Banka Hesabını Kaydet", content: "Mijn Burgerprofiel’e (burgerprofiel.be/jobbonus) dijital anahtar (ör. itsme veya eID) ile giriş yapın ve Belçika banka hesap numaranızı girin." },
+        { title: "Doğrula veya Güncelle", content: "Daha önce bir hesap kaydettiyseniz, bunun hâlâ doğru olup olmadığını kontrol edin. Gerekirse 10 gün içinde güncelleyin." },
+        { title: "Ödemeyi Al", content: "Hesabınız kayıtlıysa, iş bonusunuz (tam zamanlı için 650 euro’ya kadar) mektuptan sonraki bir ay içinde ödenecek." },
+        { title: "Tamamlandı!", content: "Tebrikler! İş bonusunuzu başarıyla talep ettiniz." }
+    ],
+    arabic: [
+        { title: "تحقق من الأهلية", content: "تأكد من أنك موظف أجير أو موظف قانوني تكسب أقل من 3000 يورو شهريًا كإجمالي في عام 2023 (ما يعادل الدوام الكامل). يجب أن تعيش في فلاندرز وأن تكون أقل من 65 عامًا." },
+        { title: "انتظر الإشعار", content: "إذا كنت مؤهلاً، ستتلقى خطابًا من حكومة فلاندرز بين نوفمبر وفبراير يحتوي على مبلغ المكافأة." },
+        { title: "سجل الحساب البنكي", content: "سجل الدخول إلى Mijn Burgerprofiel (burgerprofiel.be/jobbonus) باستخدام مفتاح رقمي (مثل itsme أو eID) وأدخل رقم حسابك البنكي البلجيكي." },
+        { title: "تحقق أو قم بالتحديث", content: "إذا كنت قد سجلت حسابًا من قبل، تحقق مما إذا كان لا يزال صحيحًا. قم بالتحديث خلال 10 أيام إذا لزم الأمر." },
+        { title: "استلم الدفعة", content: "ستُدفع مكافأة العمل الخاصة بك (تصل إلى 650 يورو للعمل بدوام كامل) خلال شهر من الخطاب، بشرط تسجيل حسابك." },
+        { title: "تم!", content: "مبروك! لقد تقدمت بطلب للحصول على مكافأة العمل بنجاح." }
+    ],
+    ukrainian: [
+        { title: "Перевірте Відповідність", content: "Переконайтеся, що ви найманий працівник або статутний державний службовець, який заробив менше 3000 євро брутто на місяць у 2023 році (еквівалент повного робочого дня). Ви повинні проживати у Фландрії та бути молодше 65 років." },
+        { title: "Дочекайтеся Повідомлення", content: "Якщо ви відповідаєте умовам, ви отримаєте лист від фламандського уряду між листопадом і лютим із сумою бонусу." },
+        { title: "Зареєструйте Банківський Рахунок", content: "Увійдіть до Mijn Burgerprofiel (burgerprofiel.be/jobbonus) за допомогою цифрового ключа (наприклад, itsme або eID) та введіть номер вашого бельгійського банківського рахунку." },
+        { title: "Перевірте або Оновіть", content: "Якщо ви раніше зареєстрували рахунок, перевірте, чи він усе ще правильний. Оновіть протягом 10 днів, якщо потрібно." },
+        { title: "Отримайте Виплату", content: "Ваш бонус за роботу (до 650 євро за повний робочий день) буде виплачено протягом місяця після листа, якщо ваш рахунок зареєстровано." },
+        { title: "Готово!", content: "Вітаємо! Ви успішно подали заявку на свій бонус за роботу." }
+    ],
+    pashto: [
+        { title: "وړتیا وګورئ", content: "ډاډ ترلاسه کړئ چې تاسو یو معاش لرونکی کارمند یا قانوني مامور یاست چې په 2023 کې یې په میاشت کې له 3000 یورو څخه کم عاید درلود (د بشپړ وخت معادل). تاسو باید په فلاندرز کې اوسېږئ او له 65 کالو کم عمر ولرئ." },
+        { title: "خبرتیا ته انتظار وکړئ", content: "که تاسو وړ یاست، تاسو به د نومبر او فبروري ترمنځ د فلمن حکومت څخه یو لیک ترلاسه کړئ چې ستاسو د بونس مقدار پکې دی." },
+        { title: "بانکي حساب ثبت کړئ", content: "د Mijn Burgerprofiel (burgerprofiel.be/jobbonus) ته د ډیجیټل کیلي (لکه itsme یا eID) سره ننوځئ او خپل بلجیمي بانکي حساب شمیره داخل کړئ." },
+        { title: "تأیید یا تازه کړئ", content: "که تاسو مخکې حساب ثبت کړی وي، وګورئ چې دا اوس هم سم دی. که اړتیا وي، په 10 ورځو کې یې تازه کړئ." },
+        { title: "تادیه ترلاسه کړئ", content: "ستاسو د کار بونس (د بشپړ وخت لپاره تر 650 یورو پورې) به د لیک وروسته په یوه میاشت کې تادیه شي، که ستاسو حساب ثبت شوی وي." },
+        { title: "ترسره شو!", content: "مبارکي! تاسو په بریالیتوب سره د خپل کار بونس لپاره غوښتنه کړې." }
+    ],
+    spanish: [
+        { title: "Verifica tu Elegibilidad", content: "Asegúrate de ser un empleado o funcionario estatutario que ganó menos de 3000 euros brutos al mes en 2023 (equivalente a tiempo completo). Debes vivir en Flandes y tener menos de 65 años." },
+        { title: "Espera la Notificación", content: "Si eres elegible, recibirás una carta del gobierno flamenco entre noviembre y febrero con el monto de tu bono." },
+        { title: "Registra tu Cuenta Bancaria", content: "Inicia sesión en Mijn Burgerprofiel (burgerprofiel.be/jobbonus) con una clave digital (por ej., itsme o eID) e ingresa tu número de cuenta bancaria belga." },
+        { title: "Verifica o Actualiza", content: "Si ya registraste una cuenta, verifica si aún es correcta. Actualízala en 10 días si es necesario." },
+        { title: "Recibe el Pago", content: "Tu bono de trabajo (hasta 650 euros por trabajo a tiempo completo) se pagará dentro de un mes desde la carta, siempre que tu cuenta esté registrada." },
+        { title: "¡Listo!", content: "¡Felicidades! Has solicitado tu bono de trabajo con éxito." }
+    ]
+},
+        };
+
+        const navigationText = {
+            english: { prev: 'Previous', next: 'Next' },
+            dutch: { prev: 'Vorige', next: 'Volgende' },
+            bulgarian: { prev: 'Назад', next: 'Напред' },
+            turkish: { prev: 'Önceki', next: 'Sonraki' },
+            arabic: { prev: 'السابق', next: 'التالي' },
+            ukrainian: { prev: 'Назад', next: 'Далі' },
+            pashto: { prev: 'شاته', next: 'راتلونکی' },
+            spanish: { prev: 'Anterior', next: 'Siguiente' }
+        };
+
+        // State
+        let currentGuide = 'itsmebank';
+        let currentLanguage = 'english';
+        let currentStep = 0;
+        // isDarkMode is handled by CSS class + localStorage
+
+        // DOM Elements
+        const appContainer = document.querySelector('.app-container');
+        const guideSelect = document.getElementById('guide-select');
+        const languageSelect = document.getElementById('language-select');
+        const themeToggle = document.getElementById('theme-toggle');
+        const stepNumberEl = document.getElementById('step-number'); // Renamed variable
+        const stepTitleEl = document.getElementById('step-title'); // Renamed variable
+        const stepDescriptionEl = document.getElementById('step-description'); // Renamed variable
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const prevText = document.getElementById('prev-text');
+        const nextText = document.getElementById('next-text');
+        const progressIndicatorsEl = document.getElementById('progress-indicators'); // Renamed variable
+        const celebrationContainer = document.getElementById('celebration-container');
+        const completionIndicatorEl = document.getElementById('completion-indicator'); // Renamed variable
+        const stepIllustrationEl = document.getElementById('step-illustration'); // Renamed variable
+        const stepContentEl = document.querySelector('.step-content'); // Added for animation reset
+
+        // --- Functions ---
+
+        function getSlides() {
+            // Gracefully handle missing language/guide combinations
+            const guideData = guides[currentGuide] || guides[Object.keys(guides)[0]]; // Default to first guide if invalid
+            return guideData[currentLanguage] || guideData['english'] || []; // Default to English if language missing
+        }
+
+        function updateUI() {
+            const slides = getSlides();
+            if (!slides || slides.length === 0) {
+                console.error("Error: No slides found for guide:", currentGuide, "language:", currentLanguage);
+                // Optionally display an error message in the UI
+                stepTitleEl.textContent = "Error";
+                stepDescriptionEl.textContent = "Content not available for the selected guide and language.";
+                stepNumberEl.textContent = "";
+                stepIllustrationEl.style.display = 'none';
+                completionIndicatorEl.innerHTML = '';
+                progressIndicatorsEl.innerHTML = '';
+                prevButton.disabled = true;
+                nextButton.disabled = true;
+                return;
+            }
+
+            const totalSteps = slides.length;
+            // Clamp currentStep to valid range
+            currentStep = Math.max(0, Math.min(currentStep, totalSteps - 1));
+            const currentSlide = slides[currentStep];
+            const isLastStep = currentStep === totalSteps - 1;
+
+            // --- Update Content ---
+            stepNumberEl.textContent = `Step ${currentStep + 1} / ${totalSteps}`;
+            stepTitleEl.textContent = currentSlide.title;
+            stepDescriptionEl.textContent = currentSlide.content;
+
+            // --- Update Navigation Text ---
+            const navText = navigationText[currentLanguage] || navigationText['english'];
+            prevText.textContent = navText.prev;
+            nextText.textContent = navText.next;
+
+            // --- Update Button States ---
+            prevButton.disabled = currentStep === 0;
+            nextButton.disabled = isLastStep; // Disable next on the last step
+
+            // --- Update Progress Indicators ---
+            updateProgressIndicators(totalSteps);
+
+            // --- Handle Illustration / Completion ---
+            const imageUrl = stepImages[currentGuide]?.[currentStep];
+
+            if (isLastStep && !imageUrl) { // Show completion indicator only if no image specified for last step
+                stepIllustrationEl.style.display = 'none'; // Hide image
+                completionIndicatorEl.innerHTML = `
+                    <div class="success-checkmark">
+                        <i class="fas fa-check"></i>
+                    </div>`;
+                startCelebration();
+            } else if (imageUrl) {
+                stepIllustrationEl.src = imageUrl;
+                stepIllustrationEl.alt = currentSlide.title + " Illustration";
+                stepIllustrationEl.style.display = 'block';
+                completionIndicatorEl.innerHTML = ''; // Clear completion
+                stopCelebration();
+            } else {
+                stepIllustrationEl.style.display = 'none'; // Hide if no image URL
+                completionIndicatorEl.innerHTML = ''; // Clear completion
+                stopCelebration();
+            }
+
+            // --- Reset Animation ---
+            // Force reflow to restart the animation on step change
+            stepContentEl.style.animation = 'none';
+            void stepContentEl.offsetWidth; // Trigger reflow
+            stepContentEl.style.animation = ''; // Re-apply animation
+        }
+
+        function updateProgressIndicators(totalSteps) {
+            progressIndicatorsEl.innerHTML = ''; // Clear existing
+            for (let i = 0; i < totalSteps; i++) {
+                const indicator = document.createElement('div');
+                indicator.className = `step-indicator ${i === currentStep ? 'active' : ''}`;
+                progressIndicatorsEl.appendChild(indicator);
+            }
+        }
+
+        function startCelebration() {
+            celebrationContainer.innerHTML = ''; // Clear previous
+            const shapes = ['square', 'triangle', 'circle'];
+            const colors = ['#fecaca', '#a5f3fc', '#bbf7d0', '#fef08a', '#fed7aa', '#fbcfe8', '#c7d2fe', '#ddd6fe', '#bfdbfe', '#fecdd3'];
+            for (let i = 0; i < 15; i++) { // Add more confetti
+                const confetti = document.createElement('div');
+                const shape = shapes[i % shapes.length];
+                confetti.className = `confetti ${shape}`;
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.animationDelay = `-${Math.random() * 3}s`; // Vary delays more
+
+                if (shape === 'triangle') {
+                     confetti.style.borderBottomColor = colors[i % colors.length];
+                } else {
+                     confetti.style.backgroundColor = colors[i % colors.length];
+                }
+
+                celebrationContainer.appendChild(confetti);
+            }
+             celebrationContainer.style.display = 'block';
+        }
+
+        function stopCelebration() {
+            celebrationContainer.innerHTML = '';
+            celebrationContainer.style.display = 'none';
+        }
+
+        function toggleDarkMode(isDark) {
+            document.body.classList.toggle('dark', isDark);
+            localStorage.setItem('sherpaDarkMode', isDark);
+        }
+
+        // --- Event Listeners ---
+        guideSelect.addEventListener('change', (e) => {
+            currentGuide = e.target.value;
+            currentStep = 0; // Reset step on guide change
+            updateUI();
+        });
+
+        languageSelect.addEventListener('change', (e) => {
+            currentLanguage = e.target.value;
+            // Don't reset step on language change, just update content
+            updateUI();
+        });
+
+        themeToggle.addEventListener('change', (e) => {
+            toggleDarkMode(e.target.checked);
+        });
+
+        prevButton.addEventListener('click', () => {
+            if (currentStep > 0) {
+                currentStep--;
+                updateUI();
+            }
+        });
+
+        nextButton.addEventListener('click', () => {
+            const slides = getSlides();
+            if (currentStep < slides.length - 1) {
+                currentStep++;
+                updateUI();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+             // Ignore key presses if user is typing in an input/select
+            if (document.activeElement.tagName === 'SELECT' || document.activeElement.tagName === 'INPUT') {
+                return;
+            }
+            if (e.key === 'ArrowLeft' && !prevButton.disabled) {
+                e.preventDefault(); // Prevent browser back navigation
+                prevButton.click();
+            }
+            if (e.key === 'ArrowRight' && !nextButton.disabled) {
+                 e.preventDefault(); // Prevent default scrolling/actions
+                nextButton.click();
+            }
+        });
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set initial theme based on saved preference or system preference
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const savedDarkMode = localStorage.getItem('sherpaDarkMode');
+            let initialIsDark;
+
+            if (savedDarkMode !== null) {
+                initialIsDark = savedDarkMode === 'true';
+            } else {
+                initialIsDark = prefersDark; // Default to system preference
+            }
+
+            themeToggle.checked = initialIsDark;
+            toggleDarkMode(initialIsDark);
+
+            // Set initial dropdown values (optional, could default to first)
+            guideSelect.value = currentGuide;
+            languageSelect.value = currentLanguage;
+
+            // Initial UI render
+            updateUI();
+
+             // Listen for system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+                 // Only change if no preference is saved explicitly
+                 if (localStorage.getItem('sherpaDarkMode') === null) {
+                     const isSystemDark = event.matches;
+                     themeToggle.checked = isSystemDark;
+                     toggleDarkMode(isSystemDark);
+                 }
+            });
+        });
+
+    </script>
+</body>
+</html>

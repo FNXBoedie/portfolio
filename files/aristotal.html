@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aristotal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #d4af37; /* Subtle gold for accents */
+            --primary-dark: #b8960f; /* Darker gold for hover states */
+            --secondary: #2c2c38; /* Deep gray for backgrounds */
+            --light: #3a3a48; /* Lighter gray for contrast */
+            --dark: #1a1a22; /* Near-black for main background */
+            --success: #2ecc71; /* Green for positive feedback */
+            --danger: #e74c3c; /* Red for errors */
+            --warning: #f1c40f; /* Yellow for cautions */
+            --text: #e0e0e0; /* Light gray for readable text */
+            --text-light: #a0a0a0; /* Muted gray for secondary text */
+            --border-radius: 8px; /* Slightly reduced for a sharper look */
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: var(--secondary);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .header {
+            background: var(--dark);
+            color: var(--text);
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            border-bottom: 1px solid var(--light);
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--primary);
+        }
+        
+        .header p {
+            margin: 10px 0 0;
+            font-size: 18px;
+            font-weight: 300;
+            opacity: 0.8;
+        }
+        
+        .setup {
+            padding: 30px;
+            background: var(--secondary);
+            border-bottom: 1px solid var(--light);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .input-group {
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+        
+        .setup select, .setup input, .setup button {
+            padding: 15px 15px 15px 45px;
+            width: 100%;
+            border: 1px solid var(--light);
+            background: var(--dark);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            color: var(--text);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+        }
+        
+        .setup select:focus, .setup input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+        }
+        
+        .setup button {
+            background: var(--primary);
+            color: var(--dark);
+            cursor: pointer;
+            font-weight: 600;
+            border: none;
+            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
+            padding: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .setup button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4);
+        }
+        
+        .setup button:active {
+            transform: translateY(0);
+        }
+        
+        .tabs {
+            display: flex;
+            background: var(--dark);
+            padding: 0;
+            border-bottom: 1px solid var(--light);
+        }
+        
+        .tab {
+            padding: 20px;
+            color: var(--text-light);
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+            transition: var(--transition);
+            font-weight: 500;
+            position: relative;
+        }
+        
+        .tab:before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: var(--transition);
+            transform: translateX(-50%);
+        }
+        
+        .tab:hover:before {
+            width: 30%;
+        }
+        
+        .tab.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .tab.active:before {
+            width: 100%;
+        }
+        
+        .content {
+            padding: 30px;
+            min-height: 400px;
+            background: var(--secondary);
+        }
+        
+        .progress {
+            margin: 0 0 30px;
+            text-align: center;
+            font-size: 16px;
+            color: var(--text-light);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .progress-bar {
+            width: 200px;
+            height: 6px;
+            background: var(--light);
+            border-radius: 10px;
+            margin: 0 15px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            width: 20%;
+            background: var(--primary);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        .lesson {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: var(--dark);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+            border: 1px solid var(--light);
+        }
+        
+        .lesson:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .lesson h2 {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 22px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .lesson h2::before {
+            content: '';
+            width: 14px;
+            height: 14px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .lesson-content {
+            margin: 20px 0 0;
+        }
+        
+        .lesson-content p {
+            margin-bottom: 15px;
+        }
+        
+        .lesson-content ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+        
+        .lesson-content li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 5px;
+        }
+        
+        .flashcard, .quiz-question {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: var(--dark);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+            border: 1px solid var(--light);
+        }
+        
+        .flashcard {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .flashcard h3 {
+            margin-top: 0;
+            color: var(--text);
+            font-weight: 600;
+        }
+        
+        .flashcard p {
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--light);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            color: var(--text);
+        }
+        
+        .flashcard button {
+            padding: 12px 20px;
+            background: var(--primary);
+            color: var(--dark);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            min-width: 150px;
+            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
+        }
+        
+        .flashcard button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4);
+        }
+        
+        .quiz-question h3 {
+            margin-top: 0;
+            color: var(--text);
+            font-weight: 600;
+        }
+        
+        .quiz-options {
+            margin-top: 20px;
+        }
+        
+        .quiz-options label {
+            display: block;
+            margin: 12px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background: var(--light);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid var(--light);
+            display: flex;
+            align-items: center;
+            color: var(--text);
+        }
+        
+        .quiz-options label:hover {
+            background: var(--primary);
+            color: var(--dark);
+            transform: translateX(5px);
+        }
+        
+        .quiz-options input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+        
+        .quiz-result {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--dark);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--light);
+        }
+        
+        .quiz-feedback {
+            text-align: left;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background: var(--light);
+        }
+        
+        #submitQuizBtn {
+            display: block;
+            margin: 30px auto;
+            padding: 15px 30px;
+            background: var(--primary);
+            color: var(--dark);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
+            font-size: 16px;
+        }
+        
+        #submitQuizBtn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4);
+        }
+        
+        .error {
+            color: var(--danger);
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: var(--border-radius);
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .setup {
+                grid-template-columns: 1fr;
+            }
+            
+            .flashcard {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .flashcard button {
+                margin-top: 15px;
+                width: 100%;
+            }
+            
+            .header h1 {
+                font-size: 32px;
+            }
+            
+            .tab {
+                padding: 15px 10px;
+                font-size: 14px;
+            }
+        }
+        
+        /* Animation effects */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .lesson, .flashcard, .quiz-question {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        .lesson:nth-child(2) { animation-delay: 0.1s; }
+        .lesson:nth-child(3) { animation-delay: 0.2s; }
+        .lesson:nth-child(4) { animation-delay: 0.3s; }
+        .lesson:nth-child(5) { animation-delay: 0.4s; }
+        
+        /* Loading indicator */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--light);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ARISTOTAL</h1>
+            <p>Begrijp technische onderwerpen in eenvoudige bewoordingen!</p>
+        </div>
+        <div class="setup">
+            <div class="input-group">
+                <i class="fas fa-robot"></i>
+                <select id="aiModel" onchange="toggleApiInput()">
+                    <option value="gemini">Gemini Flash</option>
+                    <option value="grok">Grok</option>
+                    <option value="mistral">Mistral AI</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-key"></i>
+                <input type="text" id="geminiKey" placeholder="Enter Gemini Flash API Key">
+                <input type="text" id="grokKey" placeholder="Enter Grok API Key" style="display: none;">
+                <input type="text" id="mistralKey" placeholder="Enter Mistral AI API Key" style="display: none;">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-tag"></i>
+                <input type="text" id="topicInput" placeholder="Enter an IT topic (e.g., cloud computing)">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-language"></i>
+                <input type="text" id="languageInput" placeholder="Enter language (e.g., English, Spanish, Dutch)">
+            </div>
+            <div class="input-group full-width">
+                <button onclick="generateCourse()">
+                    <i class="fas fa-graduation-cap"></i> Start Learning
+                </button>
+            </div>
+        </div>
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('lessons')">
+                <i class="fas fa-book-open"></i> Lessons
+            </div>
+            <div class="tab" onclick="showTab('flashcards')">
+                <i class="fas fa-clone"></i> Flashcards
+            </div>
+            <div class="tab" onclick="showTab('quiz')">
+                <i class="fas fa-question-circle"></i> Quiz
+            </div>
+        </div>
+        
+        <div class="content" id="lessonsTab">
+            <div class="progress">
+                <span>Beginning</span>
+                <div class="progress-bar">
+                    <div class="progress-bar-fill" id="progressBarFill"></div>
+                </div>
+                <span>Complete</span>
+            </div>
+            <div class="loading" id="lessonsLoading">
+                <div class="loading-spinner"></div>
+                <p>Generating your personalized lessons...</p>
+            </div>
+            <div class="lesson" id="lesson1">
+                <h2>What is it?</h2>
+                <div class="lesson-content" id="lesson1Content">Enter an IT topic to begin.</div>
+            </div>
+            <div class="lesson" id="lesson2">
+                <h2>Why does it matter?</h2>
+                <div class="lesson-content" id="lesson2Content">Content will appear here.</div>
+            </div>
+            <div class="lesson" id="lesson3">
+                <h2>Basics: How does it work?</h2>
+                <div class="lesson-content" id="lesson3Content">Content will appear here.</div>
+            </div>
+            <div class="lesson" id="lesson4">
+                <h2>Common misconceptions or fears</h2>
+                <div class="lesson-content" id="lesson4Content">Content will appear here.</div>
+            </div>
+            <div class="lesson" id="lesson5">
+                <h2>Everyday examples</h2>
+                <div class="lesson-content" id="lesson5Content">Content will appear here.</div>
+            </div>
+        </div>
+        
+        <div class="content" id="flashcardsTab" style="display: none;">
+            <div class="loading" id="flashcardsLoading">
+                <div class="loading-spinner"></div>
+                <p>Creating your flashcards...</p>
+            </div>
+            <div id="flashcardsContent"></div>
+        </div>
+        
+        <div class="content" id="quizTab" style="display: none;">
+            <div class="loading" id="quizLoading">
+                <div class="loading-spinner"></div>
+                <p>Generating your quiz questions...</p>
+            </div>
+            <div id="quizContent"></div>
+            <button onclick="submitQuiz()" style="display: none;" id="submitQuizBtn">
+                <i class="fas fa-check-circle"></i> Submit Quiz
+            </button>
+            <div class="quiz-result" id="quizResult"></div>
+        </div>
+        
+        <p id="error" class="error" style="display: none;"></p>
+    </div>
+
+    <script>
+        let geminiKey = '';
+        let grokKey = '';
+        let mistralKey = '';
+        let currentLesson = 0;
+
+        function toggleApiInput() {
+            const model = document.getElementById('aiModel').value;
+            document.getElementById('geminiKey').style.display = model === 'gemini' ? 'block' : 'none';
+            document.getElementById('grokKey').style.display = model === 'grok' ? 'block' : 'none';
+            document.getElementById('mistralKey').style.display = model === 'mistral' ? 'block' : 'none';
+        }
+
+        function showTab(tabId) {
+            document.querySelectorAll('.content').forEach(tab => tab.style.display = 'none');
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`${tabId}Tab`).style.display = 'block';
+            document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = message ? 'block' : 'none';
+        }
+
+        function updateProgress(lesson) {
+            currentLesson = lesson;
+            const progressFill = document.getElementById('progressBarFill');
+            progressFill.style.width = `${(lesson / 5) * 100}%`;
+        }
+
+        function showLoading(type, show) {
+            document.getElementById(`${type}Loading`).style.display = show ? 'block' : 'none';
+        }
+
+        async function generateCourse() {
+            const topic = document.getElementById('topicInput').value.trim();
+            const language = document.getElementById('languageInput').value.trim() || 'English';
+            const model = document.getElementById('aiModel').value;
+            geminiKey = document.getElementById('geminiKey').value.trim();
+            grokKey = document.getElementById('grokKey').value.trim();
+            mistralKey = document.getElementById('mistralKey').value.trim();
+
+            if (!topic) {
+                showError('Please enter an IT topic.');
+                return;
+            }
+
+            let apiKey = model === 'gemini' ? geminiKey : model === 'grok' ? grokKey : mistralKey;
+            if (!apiKey) {
+                showError(`Please enter the API key for ${model}.`);
+                return;
+            }
+
+            showError('');
+            updateProgress(0);
+            showLoading('lessons', true);
+
+            try {
+                const prompts = [
+                    `Explain what ${topic} is in simple, everyday language for someone who isn't tech-savvy. Keep it short, clear, and avoid technical jargon. Provide the response in ${language}.`,
+                    `Describe why ${topic} matters to everyday people. How does it affect their life or work? Keep it simple and relatable. Provide the response in ${language}.`,
+                    `Give a basic, high-level explanation of how ${topic} works, without technical details. Use simple terms a beginner can understand. Provide the response in ${language}.`,
+                    `List 2-3 common misconceptions or fears people have about ${topic} and explain them simply to clear up confusion. Provide the response in ${language}.`,
+                    `Provide 2-3 everyday, relatable examples of ${topic} usecases that a non-tech person can connect to their life. Provide the response in ${language}.`
+                ];
+                
+                for (let i = 0; i < 5; i++) {
+                    const content = await fetchContent(model, topic, prompts[i]);
+                    const formattedContent = formatContent(content || 'Failed to load content.');
+                    document.getElementById(`lesson${i + 1}Content`).innerHTML = formattedContent;
+                    updateProgress(i + 1);
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                }
+
+                showLoading('lessons', false);
+                showLoading('flashcards', true);
+                await generateFlashcards(topic, model, language);
+                showLoading('flashcards', false);
+                
+                showLoading('quiz', true);
+                await generateQuiz(topic, model, language);
+                showLoading('quiz', false);
+                
+            } catch (error) {
+                showError(`Error: ${error.message}`);
+                showLoading('lessons', false);
+                showLoading('flashcards', false);
+                showLoading('quiz', false);
+            }
+        }
+
+        function formatContent(content) {
+            const lines = content.split('\n').filter(line => line.trim());
+            if (lines.length > 1 && lines[0].match(/^\d+\.|^-\s/)) {
+                const listItems = lines.map(line => `<li>${line.replace(/^\d+\.\s|^-\s/, '').trim()}</li>`).join('');
+                return `<ul>${listItems}</ul>`;
+            } else {
+                return lines.map(line => `<p>${line.trim()}</p>`).join('');
+            }
+        }
+
+        async function fetchContent(model, topic, prompt) {
+            if (model === 'gemini') return fetchGeminiContent(topic, prompt);
+            if (model === 'grok') return fetchGrokContent(topic, prompt);
+            if (model === 'mistral') return fetchMistralContent(topic, prompt);
+        }
+
+        async function fetchGeminiContent(topic, prompt) {
+            const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+            const response = await fetch(`${url}?key=${geminiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+            });
+            if (!response.ok) throw new Error('Gemini API request failed');
+            const data = await response.json();
+            return data.candidates[0].content.parts[0].text;
+        }
+
+        async function fetchGrokContent(topic, prompt) {
+            const url = 'https://api.xai.com/v1/grok';
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${grokKey}` },
+                body: JSON.stringify({ prompt: prompt, max_tokens: 150 })
+            });
+            if (!response.ok) throw new Error('Grok API request failed');
+            const data = await response.json();
+            return data.response;
+        }
+
+        async function fetchMistralContent(topic, prompt) {
+            const url = 'https://api.mixtral.ai/v1/completions';
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${mistralKey}` },
+                body: JSON.stringify({ model: 'mistral-large', prompt: prompt, max_tokens: 150 })
+            });
+            if (!response.ok) throw new Error('Mistral API request failed');
+            const data = await response.json();
+            return data.choices[0].text;
+        }
+
+        async function generateFlashcards(topic, model, language) {
+            const flashcardsContent = document.getElementById('flashcardsContent');
+            flashcardsContent.innerHTML = '';
+            const flashcardPrompt = `Generate 5 simple flashcard questions and answers about ${topic} for non-tech-savvy people in the format: Q: [question] A: [answer]. Use everyday language and provide the response in ${language}.`;
+            const content = await fetchContent(model, topic, flashcardPrompt);
+            const pairs = content.match(/Q:.*?A:.*?(?=Q:|$)/gs) || [];
+            
+            pairs.forEach((pair, index) => {
+                const qMatch = pair.match(/Q:(.*?)(?=A:|$)/s);
+                const aMatch = pair.match(/A:(.*?)(?=$)/s);
+                
+                if (qMatch && aMatch) {
+                    const question = qMatch[1].trim();
+                    const answer = aMatch[1].trim();
+                    
+                    flashcardsContent.innerHTML += `
+                        <div class="flashcard" style="animation-delay: ${index * 0.1}s">
+                            <div>
+                                <h3>${question}</h3>
+                                <p style="display: none;" id="answer-${index}">${answer}</p>
+                            </div>
+                            <button onclick="this.previousElementSibling.querySelector('p').style.display = 'block'; this.style.display = 'none';">
+                                <i class="fas fa-lightbulb"></i> Reveal Answer
+                            </button>
+                        </div>`;
+                }
+            });
+            
+            if (pairs.length === 0) {
+                flashcardsContent.innerHTML = `
+                    <div class="flashcard">
+                        <div>
+                            <h3>No flashcards generated</h3>
+                            <p>Try adjusting your topic to get better results.</p>
+                        </div>
+                    </div>`;
+            }
+        }
+
+        async function generateQuiz(topic, model, language) {
+            const quizContent = document.getElementById('quizContent');
+            quizContent.innerHTML = '';
+            const quizPrompt = `Generate a 5-question multiple-choice quiz about ${topic} for non-tech-savvy people. For each question, provide exactly 4 options, mark the correct answer with an asterisk (*), and use this exact format:\n\nQ: [question]\nA: [option]\nB: [option]\nC: [option]\nD: [option]\n\nUse simple, relatable language. Ensure each question is distinct and has exactly one correct answer. Provide the response in ${language}.`;
+            const content = await fetchContent(model, topic, quizPrompt);
+            
+            const questionBlocks = content.trim().split(/\n\n+/).filter(block => block.trim().startsWith('Q:'));
+            let questionCount = 0;
+
+            for (const block of questionBlocks) {
+                if (questionCount >= 5) break;
+                const lines = block.split('\n').map(line => line.trim()).filter(line => line);
+                if (lines.length !== 5) continue;
+
+                const question = lines[0].startsWith('Q:') ? lines[0].slice(2).trim() : null;
+                const options = lines.slice(1).map(opt => {
+                    const letter = opt.charAt(0);
+                    return { text: opt.slice(2).trim(), letter: letter };
+                });
+
+                if (!question || options.length !== 4 || !['A', 'B', 'C', 'D'].every(l => options.some(o => o.letter === l))) {
+                    continue;
+                }
+
+                let correctAnswer = '';
+                const optionsHTML = options.map((opt, j) => {
+                    if (opt.text.includes('*')) {
+                        correctAnswer = String.fromCharCode(97 + j);
+                        opt.text = opt.text.replace('*', '').trim();
+                    }
+                    return `
+                        <div class="quiz-options">
+                            <label>
+                                <input type="radio" name="q${questionCount}" value="${String.fromCharCode(97 + j)}"> 
+                                <span>${opt.text}</span>
+                            </label>
+                        </div>`;
+                }).join('');
+
+                if (!correctAnswer) continue;
+
+                quizContent.innerHTML += `
+                    <div class="quiz-question" data-correct="${correctAnswer}" style="animation-delay: ${questionCount * 0.15}s">
+                        <h3>${questionCount + 1}. ${question}</h3>
+                        ${optionsHTML}
+                    </div>`;
+                questionCount++;
+            }
+
+            if (questionCount < 5) {
+                showError(`Warning: Only generated ${questionCount} valid questions. Try again or refine the topic.`);
+            }
+
+            document.getElementById('submitQuizBtn').style.display = questionCount > 0 ? 'block' : 'none';
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            const questions = document.querySelectorAll('.quiz-question');
+            const feedbackHTML = [];
+
+            questions.forEach((q, i) => {
+                const selected = q.querySelector(`input[name="q${i}"]:checked`);
+                const userAnswer = selected ? selected.value : null;
+                const correctAnswer = q.dataset.correct;
+                const questionText = q.querySelector('h3').textContent;
+                const options = Array.from(q.querySelectorAll('label span')).map(span => span.textContent.trim());
+
+                let feedbackClass = 'warning';
+                let feedbackIcon = 'question-circle';
+                let feedbackMessage = '';
+
+                if (!userAnswer) {
+                    feedbackMessage = `You didn't select an answer. The correct answer is "${options[correctAnswer.charCodeAt(0) - 97]}".`;
+                } else if (userAnswer === correctAnswer) {
+                    score++;
+                    feedbackClass = 'success';
+                    feedbackIcon = 'check-circle';
+                    feedbackMessage = `Correct! You chose "${options[userAnswer.charCodeAt(0) - 97]}".`;
+                } else {
+                    feedbackClass = 'danger'; 
+                    feedbackIcon = 'times-circle';
+                    const userChoiceText = options[userAnswer.charCodeAt(0) - 97];
+                    const correctChoiceText = options[correctAnswer.charCodeAt(0) - 97];
+                    feedbackMessage = `Incorrect. You chose "${userChoiceText}", but the correct answer is "${correctChoiceText}".`;
+                }
+
+                feedbackHTML.push(`
+                    <div class="quiz-feedback" style="color: var(--${feedbackClass}); border-left: 4px solid var(--${feedbackClass});">
+                        <i class="fas fa-${feedbackIcon}"></i> ${questionText.split('.')[1].trim()}: ${feedbackMessage}
+                    </div>`);
+
+                q.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = true);
+            });
+
+            const percentScore = Math.round((score / questions.length) * 100);
+            let resultMessage = '';
+            let resultIcon = '';
+            
+            if (percentScore >= 80) {
+                resultMessage = 'Excellent! You really understand this topic.';
+                resultIcon = '<i class="fas fa-trophy" style="font-size: 32px; color: var(--success); display: block; margin-bottom: 15px;"></i>';
+            } else if (percentScore >= 60) {
+                resultMessage = 'Good job! You have a solid grasp of the basics.';
+                resultIcon = '<i class="fas fa-medal" style="font-size: 32px; color: var(--primary); display: block; margin-bottom: 15px;"></i>';
+            } else {
+                resultMessage = 'Keep learning! Review the lessons and try again.';
+                resultIcon = '<i class="fas fa-book" style="font-size: 32px; color: var(--warning); display: block; margin-bottom: 15px;"></i>';
+            }
+
+            document.getElementById('quizResult').innerHTML = `
+                ${resultIcon}
+                <p style="font-size: 24px; font-weight: 600; margin-bottom: 10px;">Your Score: ${score} out of ${questions.length} (${percentScore}%)</p>
+                <p style="margin-bottom: 20px;">${resultMessage}</p>
+                ${feedbackHTML.join('')}
+            `;
+            document.getElementById('submitQuizBtn').style.display = 'none';
+        }
+
+        if (!window.fetch) {
+            showError('Your browser does not support fetch API. Please use a modern browser.');
+        }
+        toggleApiInput();
+    </script>
+</body>
+</html>

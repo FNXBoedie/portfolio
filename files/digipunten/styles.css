@@ -1,0 +1,343 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f5f5f7;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header {
+    background-color: rgba(255, 255, 255, 0.72);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    color: #1d1d1f;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 100;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.02);
+}
+
+h1 {
+    font-size: 1.3rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+}
+
+.actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+button {
+    padding: 0.6rem 1.2rem;
+    background-color: #1d1d1f;
+    color: white;
+    border: none;
+    border-radius: 980px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    background-color: #2d2d2f;
+}
+
+button:active {
+    background-color: #2b2b2e;
+    transform: scale(0.98);
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-btn {
+    padding: 0.6rem 1.2rem;
+    background-color: #1d1d1f;
+    color: white;
+    border: none;
+    border-radius: 980px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.dropdown-btn:hover {
+    background-color: #2d2d2f;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 0.5rem;
+    min-width: 180px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    z-index: 1000;
+}
+
+.dropdown-content a {
+    color: #1d1d1f;
+    padding: 0.8rem 1.2rem;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.2s;
+}
+
+.dropdown-content a:hover {
+    background-color: #f5f5f7;
+}
+
+.dropdown-content a:first-child {
+    border-radius: 8px 8px 0 0;
+}
+
+.dropdown-content a:last-child {
+    border-radius: 0 0 8px 8px;
+}
+
+.dropdown.active .dropdown-content {
+    display: block;
+}
+
+/* Form specific dropdown styles */
+#postForm .dropdown {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+#postForm .dropdown-btn {
+    width: 100%;
+    text-align: left;
+}
+
+#postForm .dropdown-content {
+    width: 100%;
+}
+
+#filterSelect {
+    min-width: 160px;
+    margin-right: 0.8rem;
+    z-index: 20;
+    position: relative;
+}
+
+#map {
+    flex-grow: 1;
+    width: 100%;
+    z-index: 1;
+}
+
+.modal {
+    display: none;
+    position: absolute;
+    top: 72px; /* Height of header + padding */
+    right: 20px;
+    width: 320px;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    z-index: 99;
+}
+
+.modal.active {
+    display: block;
+}
+
+.modal-content {
+    padding: 1.5rem;
+}
+
+.close {
+    position: absolute;
+    right: 1rem;
+    top: 0.8rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #1d1d1f;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.close:hover {
+    opacity: 1;
+}
+
+#postForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#postForm input,
+#postForm textarea {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background-color: rgba(255, 255, 255, 0.8);
+    transition: all 0.2s ease;
+}
+
+#postForm input:focus,
+#postForm textarea:focus {
+    outline: none;
+    border-color: #1d1d1f;
+    background-color: white;
+}
+
+#postForm textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+#postForm button {
+    margin-top: 0.5rem;
+}
+
+.upload-label {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    background-color: rgba(29, 29, 31, 0.1);
+    color: #1d1d1f;
+    border-radius: 980px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.upload-label:hover {
+    background-color: rgba(29, 29, 31, 0.15);
+}
+
+.upload-label input[type="file"] {
+    display: none;
+}
+
+.image-preview {
+    margin-top: 0.5rem;
+    max-width: 100%;
+    min-height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.image-preview img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+}
+
+.image-preview.has-image {
+    min-height: 100px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0.5rem;
+}
+
+.leaflet-popup-content {
+    margin: 0.5rem;
+}
+
+.leaflet-popup {
+    max-width: 280px !important;
+}
+
+.post-popup {
+    padding: 10px;
+    width: 100%;
+    max-width: 260px;
+    font-size: 14px;
+}
+
+.post-popup img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    margin: 10px 0;
+    border-radius: 8px;
+    display: block;
+}
+
+.post-popup h3 {
+    margin: 5px 0;
+    color: #1d1d1f;
+    font-size: 16px;
+}
+
+.post-popup p {
+    margin: 10px 0;
+    color: #1d1d1f;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.post-type {
+    font-size: 0.9em;
+    color: #666;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.delete-btn {
+    background-color: #ff4444;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    margin-top: 0.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.delete-btn:hover {
+    background-color: #cc0000;
+}
+
+/* Custom marker styles */
+.custom-marker {
+    position: relative;
+}
+
+.marker-pin {
+    width: 30px;
+    height: 30px;
+    border-radius: 50% 50% 50% 0;
+    position: absolute;
+    transform: rotate(-45deg);
+    left: 50%;
+    top: 50%;
+    margin: -15px 0 0 -15px;
+}
+
+.marker-pin.red {
+    background: #ff4444;
+}
+
+.marker-pin.green {
+    background: #4CAF50;
+}
