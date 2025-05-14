@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
             type: '',
             title: 'AMAL',
             description: 'Digipunt in een Agentschap Inburgering & Integratie',
-            location: { lat: 51.0606253, lng: 3.7118666 },
+            location: { lat: 51.0606253, lng: 3.7319163 },
             timestamp: new Date().getTime(),
             userId: 'default',
             image: './images/digipunt.png'
